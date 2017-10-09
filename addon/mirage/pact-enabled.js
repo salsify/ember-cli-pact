@@ -1,4 +1,4 @@
-import Interaction from 'ember-cli-pact/-private/interaction';
+import MockProvider from 'ember-cli-pact/mock-provider';
 
 // Yikes.
 let mode = 'data';
@@ -6,14 +6,12 @@ let mode = 'data';
 export default function PactEnabled(SerializerClass) {
   return class PactEnabledSerializer extends SerializerClass {
     serialize(resource, request) {
-      let interaction = Interaction.current();
-      if (interaction) {
-        mode = 'rules';
-        try {
-          interaction.recordRequest(request, super.serialize(...arguments));
-        } finally {
-          mode = 'data';
-        }
+      mode = 'rules';
+      try {
+        // TODO build a proper mock provider for Pact
+        MockProvider.prototype.recordRequest(request, super.serialize(...arguments));
+      } finally {
+        mode = 'data';
       }
 
       return super.serialize(...arguments);
@@ -34,5 +32,5 @@ export default function PactEnabled(SerializerClass) {
         return { 'rules for': resource };
       }
     }
-  }
+  };
 }

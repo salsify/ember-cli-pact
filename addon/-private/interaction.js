@@ -13,11 +13,6 @@ export default class Interaction {
     return CURRENT = new Interaction(description, provider);
   }
 
-  static assertCurrent() {
-    assert('No current interaction', CURRENT);
-    return CURRENT;
-  }
-
   static current() {
     return CURRENT;
   }

@@ -41,7 +41,7 @@ export default class PactTestModule extends TestModule {
   }
 
   teardownInteraction() {
-    let interaction = Interaction.assertCurrent();
+    let interaction = Interaction.current();
     let upload = uploadInteraction(interaction);
 
     interaction.teardown();

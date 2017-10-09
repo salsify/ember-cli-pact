@@ -1,17 +1,17 @@
 {
   "name": "ember-cli-pact",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0",
+  "description": "Contract testing with Ember.js and Pact",
   "keywords": [
     "ember-addon"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Dan Freeman",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "salsify/ember-cli-pact",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
