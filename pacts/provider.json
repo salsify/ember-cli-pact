@@ -1,0 +1,214 @@
+{
+  "consumer": {
+    "name": "ember-cli-pact"
+  },
+  "interactions": [
+    {
+      "description": "fetching a person by ID",
+      "providerStates": [
+        {
+          "name": "a person exists",
+          "params": {
+            "id": "1",
+            "name": "Alice"
+          }
+        }
+      ],
+      "request": {
+        "body": null,
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/people/1",
+        "type": "GET"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "attributes": {
+              "name": "Alice"
+            },
+            "id": "1",
+            "relationships": {
+              "department": {
+                "data": null
+              }
+            },
+            "type": "people"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "listing people",
+      "providerStates": [
+        {
+          "name": "a department exists",
+          "params": {
+            "id": "1",
+            "name": "People"
+          }
+        },
+        {
+          "name": "a person exists",
+          "params": {
+            "departmentId": "1",
+            "id": "1",
+            "name": "Alice"
+          }
+        },
+        {
+          "name": "a person exists",
+          "params": {
+            "departmentId": "1",
+            "id": "2",
+            "name": "Bob"
+          }
+        }
+      ],
+      "request": {
+        "body": null,
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/people",
+        "type": "GET"
+      },
+      "response": {
+        "body": {
+          "data": [
+            {
+              "attributes": {
+                "name": "Alice"
+              },
+              "id": "1",
+              "relationships": {
+                "department": {
+                  "data": {
+                    "id": "1",
+                    "type": "departments"
+                  }
+                }
+              },
+              "type": "people"
+            },
+            {
+              "attributes": {
+                "name": "Bob"
+              },
+              "id": "2",
+              "relationships": {
+                "department": {
+                  "data": {
+                    "id": "1",
+                    "type": "departments"
+                  }
+                }
+              },
+              "type": "people"
+            }
+          ],
+          "included": [
+            {
+              "attributes": {
+                "name": "People"
+              },
+              "id": "1",
+              "relationships": {
+                "members": {
+                  "data": [
+                    {
+                      "id": "1",
+                      "type": "people"
+                    },
+                    {
+                      "id": "2",
+                      "type": "people"
+                    }
+                  ]
+                }
+              },
+              "type": "departments"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "updating a person",
+      "providerStates": [
+        {
+          "name": "a person exists",
+          "params": {
+            "id": "1",
+            "name": "Alice"
+          }
+        }
+      ],
+      "request": {
+        "body": {
+          "data": {
+            "attributes": {
+              "name": "Alicia"
+            },
+            "id": "1",
+            "relationships": {
+              "department": {
+                "data": null
+              }
+            },
+            "type": "people"
+          }
+        },
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/people/1",
+        "type": "PATCH"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "attributes": {
+              "name": "Alicia"
+            },
+            "id": "1",
+            "relationships": {
+              "department": {
+                "data": null
+              }
+            },
+            "type": "people"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "ember-cli-pact": {
+      "version": "1.0.0-alpha.1"
+    },
+    "pact-specification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "provider"
+  }
+}

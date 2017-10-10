@@ -1,4 +1,4 @@
-/* eslint-env node */
+/* eslint-env node, es6 */
 'use strict';
 
 module.exports = {
@@ -8,24 +8,18 @@ module.exports = {
     return {
       'ember-cli-pact': {
         mockProvider: 'mirage',
-        finalizationTimeout: 10 * 60 * 1000,
         providerName: 'provider',
-        consumerName: this.project.name()
+        consumerName: this.project.name(),
+        pactsDirectory: 'pacts'
       }
     };
   },
 
   testemMiddleware(app) {
-    const bodyParser = require('body-parser');
+    const PactMiddleware = require('./lib/pact-middleware');
+    let config = this.project.config()['ember-cli-pact'];
+    let middleware = new PactMiddleware(config);
 
-    app.post('/_pact/upload', bodyParser.json({ limit: '50mb' }), (req, res) => {
-      // TODO deal with incoming pact payloads
-      res.send('ok');
-    });
-
-    app.post('/_pact/finalize', bodyParser.json(), (req, res) => {
-      // TODO handle session finalization
-      res.send('ok');
-    });
-  }
+    middleware.attach(app);
+  },
 };
