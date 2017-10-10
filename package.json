@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-pact",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.1",
   "description": "Contract testing with Ember.js and Pact",
   "keywords": [
     "ember-addon"
@@ -44,6 +44,7 @@
     "ember-load-initializers": "^1.0.0",
     "ember-resolver": "^4.0.0",
     "ember-source": "~2.15.0",
+    "ember-uuid": "^1.0.0",
     "loader.js": "^4.2.3"
   },
   "engines": {

@@ -4,8 +4,7 @@ import require from 'require';
 import { TestModule } from 'ember-test-helpers';
 import { getOwner } from '@ember/application';
 
-import Interaction from './interaction';
-import { loadProviderStates } from './provider-states';
+import { uploadInteraction } from './upload-interaction';
 
 export default class PactTestModule extends TestModule {
   constructor(description, callbacks = {}) {
@@ -14,71 +13,58 @@ export default class PactTestModule extends TestModule {
     super('pact:-', description, callbacks);
 
     this.setupSteps.push(this.setupStore);
-    this.setupSteps.push(this.setupInteraction);
-    this.setupSteps.push(this.setupProviderStates);
-    this.teardownSteps.push(this.teardownInteraction);
+    this.setupSteps.push(this.setupProvider);
+    this.teardownSteps.push(this.teardownProvider);
   }
 
   setupStore() {
     this.context.store = () => this.container.lookup('service:store');
   }
 
-  setupInteraction({ test }) {
-    let { callbacks, context } = this;
-    let provider = callbacks.provider
-      ? callbacks.provider.call(context)
-      : startMirageIfAvailable(this._env());
+  setupProvider({ test }) {
+    let { context } = this;
+    let MockProvider = this._loadMockProvider();
+    let provider = this.provider = new MockProvider(this._config());
 
-    let interaction = Interaction.start(test.testName, provider);
-
-    context.given = (name, params) => interaction.given(name, params);
-    context.interaction = (options) => interaction.capture(context, options);
     context.provider = () => provider;
+    context.given = (name, params) => provider.addState(name, params);
+    context.interaction = (options) => provider.specifyInteraction(context, this._normalize(options));
+
+    provider.startInteraction(test.testName);
   }
 
-  setupProviderStates() {
-    loadProviderStates(this._env());
-  }
+  teardownProvider() {
+    let interaction = this.provider.interaction;
+    let upload = uploadInteraction(interaction, {
+      provider: this._getConfigValue('providerName'),
+      consumer: this._getConfigValue('consumerName')
+    });
 
-  teardownInteraction() {
-    let interaction = Interaction.current();
-    let upload = uploadInteraction(interaction);
-
-    interaction.teardown();
+    this.provider.endInteraction();
+    this.provider = null;
 
     Testem.afterTests((config, data, callback) => upload.then(() => callback()));
   }
 
-  _env() {
-    return getOwner(this.context).resolveRegistration('config:environment');
+  _config() {
+    return this.__config || (this.__config = getOwner(this.context).resolveRegistration('config:environment'));
   }
-}
 
-function uploadInteraction(interaction) {
-  let fetch = self.fetch || require('fetch').default;
-  let params = {
-    method: 'POST',
-    body: JSON.stringify(interaction),
-    headers: {
-      'Content-Type': 'application/json'
+  _getConfigValue(key) {
+    return key in this.callbacks ? this.callbacks[key] : this._config()['ember-cli-pact'][key];
+  }
+
+  _normalize(details) {
+    if (typeof details === 'function') {
+      return { perform: details };
     }
-  };
 
-  return fetch('/_pact/upload', params)
-    .then((result) => result.ok || warn(`Error uploading interaction result: ${result.statusText}`))
-    .catch((error) => warn(`Error uploading interaction result: ${error}`));
-}
-
-function startMirageIfAvailable(env) {
-  try {
-    let { startMirage } = require(`${env.modulePrefix}/initializers/ember-cli-mirage`);
-    return startMirage();
-  } catch (error) {
-    // Do nothing
+    return details;
   }
-}
 
-function warn(...args) {
-  // eslint-disable-next-line no-console
-  console.warn(...args);
+  _loadMockProvider() {
+    let { modulePrefix } = this._config();
+    let name = this._getConfigValue('mockProvider');
+    return require(`${modulePrefix}/tests/helpers/pact-providers/${name}`).default;
+  }
 }
