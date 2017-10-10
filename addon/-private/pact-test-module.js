@@ -3,14 +3,18 @@
 import require from 'require';
 import { TestModule } from 'ember-test-helpers';
 import { getOwner } from '@ember/application';
+import { assert } from '@ember/debug';
+import { Promise } from 'rsvp'
 
-import { uploadInteraction } from './upload-interaction';
+import { uploadInteraction, finalize } from './upload';
 
 export default class PactTestModule extends TestModule {
   constructor(description, callbacks = {}) {
     callbacks.integration = true;
 
     super('pact:-', description, callbacks);
+
+    assert(`ember-cli-pact doesn't currently support testing multiple consumers`, !callbacks.consumerName);
 
     this.setupSteps.push(this.setupStore);
     this.setupSteps.push(this.setupProvider);
@@ -40,10 +44,11 @@ export default class PactTestModule extends TestModule {
       consumer: this._getConfigValue('consumerName')
     });
 
+    addUpload(upload);
+    registerFinalizeCallback();
+
     this.provider.endInteraction();
     this.provider = null;
-
-    Testem.afterTests((config, data, callback) => upload.then(() => callback()));
   }
 
   _config() {
@@ -66,5 +71,25 @@ export default class PactTestModule extends TestModule {
     let { modulePrefix } = this._config();
     let name = this._getConfigValue('mockProvider');
     return require(`${modulePrefix}/tests/helpers/pact-providers/${name}`).default;
+  }
+}
+
+let addedFinalizeCallback = false;
+let uploads = [];
+
+function addUpload(upload) {
+  uploads.push(upload);
+  upload.finally(() => uploads.splice(uploads.indexOf(upload), 1));
+}
+
+function registerFinalizeCallback() {
+  if (!addedFinalizeCallback) {
+    addedFinalizeCallback = true;
+    Testem.afterTests((config, data, callback) => {
+      Promise.all(uploads)
+        .then(() => finalize())
+        .then(() => callback())
+        .catch((error) => setTimeout(() => { throw error; }));
+    });
   }
 }
