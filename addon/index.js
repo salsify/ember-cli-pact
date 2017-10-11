@@ -11,6 +11,23 @@ export function moduleForPact(...args) {
 
 // Mocha-style setupTest hook
 export function setupPactTest(...args) {
-  let setupTestFactory = require('ember-mocha/setup-test-factory');
-  return setupTestFactory(PactTestModule)(...args);
+  return getMochaTestFactory()(...args);
+}
+
+let mochaTestFactory;
+function getMochaTestFactory() {
+  if (!mochaTestFactory) {
+    let setupTestFactory = require('ember-mocha/setup-test-factory').default;
+    let test;
+    require('mocha').beforeEach(function() {
+      test = { testName: this.currentTest.title };
+    });
+
+    mochaTestFactory = setupTestFactory(class extends PactTestModule {
+      setupProvider() {
+        return super.setupProvider({ test });
+      }
+    });
+  }
+  return mochaTestFactory;
 }

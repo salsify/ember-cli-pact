@@ -79,6 +79,16 @@ module.exports = {
       npm: {
         devDependencies: {}
       }
+    },
+    {
+      name: 'mocha',
+      npm: {
+        devDependencies: {
+          'ember-cli-mocha': 'latest',
+          'ember-cli-chai': 'latest',
+          'ember-cli-qunit': null
+        }
+      }
     }
   ]
 };

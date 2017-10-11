@@ -1,6 +1,7 @@
 import { test } from 'ember-qunit';
-import { run } from '@ember/runloop';
 import { moduleForPact } from 'ember-cli-pact';
+
+import { run } from '@ember/runloop';
 
 moduleForPact('Pact | People');
 
@@ -11,9 +12,9 @@ test('listing people', async function(assert) {
 
   let people = await this.interaction(() => this.store().findAll('person'));
 
-  assert.deepEqual(people.mapBy('id'), ['1', '2']);
-  assert.deepEqual(people.mapBy('name'), ['Alice', 'Bob']);
-  assert.deepEqual(people.mapBy('department.name'), ['People', 'People']);
+  assert.deepEqual([...people.mapBy('id')], ['1', '2']);
+  assert.deepEqual([...people.mapBy('name')], ['Alice', 'Bob']);
+  assert.deepEqual([...people.mapBy('department.name')], ['People', 'People']);
 });
 
 test('fetching a person by ID', async function(assert) {
@@ -25,7 +26,7 @@ test('fetching a person by ID', async function(assert) {
   assert.equal(person.get('name'), 'Alice');
 });
 
-test('updating a person', async function assert(assert) {
+test('updating a person', async function(assert) {
   this.given('a person exists', { id: '1', name: 'Alice' });
 
   let person = await run(() => this.store().findRecord('person', '1'));

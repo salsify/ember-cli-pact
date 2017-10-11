@@ -16,5 +16,11 @@ module.exports = function(defaults) {
     }
   });
 
+  if ('ember-cli-mocha' in require('./package.json').devDependencies) {
+    app.import('vendor/testing/qunit-shims.js');
+  } else {
+    app.import('vendor/testing/mocha-shims.js');
+  }
+
   return app.toTree();
 };
