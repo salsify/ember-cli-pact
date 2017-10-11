@@ -10,7 +10,8 @@ module.exports = {
         mockProvider: 'mirage',
         providerName: 'provider',
         consumerName: this.project.name(),
-        pactsDirectory: 'pacts'
+        pactsDirectory: 'pacts',
+        mode: process.env.PACT_MODE || (process.env.CI ? 'verify' : 'write')
       }
     };
   },

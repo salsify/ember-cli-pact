@@ -33,7 +33,7 @@ function post(path, body) {
       }
     })
     .catch((error) => {
-      throw new Error(`[ember-cli-pact] Upload error: ${error.message}`);
+      throw new Error(`[ember-cli-pact] ${error.message}`);
     });
 }
 
