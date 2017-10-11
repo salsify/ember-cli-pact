@@ -9,7 +9,7 @@ import { Promise } from 'rsvp'
 import { uploadInteraction, finalize } from './upload';
 
 export default class PactTestModule extends TestModule {
-  constructor(description, callbacks = {}) {
+  constructor(_, description, callbacks = {}) {
     callbacks.integration = true;
 
     super('pact:-', description, callbacks);
@@ -79,7 +79,7 @@ let uploads = [];
 
 function addUpload(upload) {
   uploads.push(upload);
-  upload.finally(() => uploads.splice(uploads.indexOf(upload), 1));
+  upload.then(() => uploads.splice(uploads.indexOf(upload), 1));
 }
 
 function registerFinalizeCallback() {
