@@ -28,18 +28,17 @@ export default class MirageProvider extends MockProvider {
     state.config.call(null, this.server, params);
   }
 
-  // Called by the PactEnabled serializer mixin
-  recordRequest(request, rules) {
-    if (this.isCapturing()) {
-      this.interaction.recordRequest(request);
-      this.interaction.addMatchRules(rules);
-    }
-  }
-
   endInteraction() {
     this._shutdownServer();
     this._deactivate();
     super.endInteraction(...arguments);
+  }
+
+  // Called by the PactEnabled serializer mixin
+  recordRequest(request) {
+    if (this.isCapturing()) {
+      this.interaction.recordRequest(request);
+    }
   }
 
   _activate() {

@@ -1,11 +1,12 @@
 import { assert } from '@ember/debug';
+import { v3 as serializeV3 } from 'ember-cli-pact/-private/serialization';
 
 export default class Interaction {
   constructor(description) {
     this.description = description;
     this.captured = null;
     this.providerStates = [];
-    this.matchRules = [];
+    this.matchingRules = [];
   }
 
   addProviderState(name, params) {
@@ -17,26 +18,12 @@ export default class Interaction {
     this.captured = request;
   }
 
-  addMatchRules(rules) {
-    this.matchRules.push(rules);
+  addMatchingRules(rules) {
+    this.matchingRules.push(rules);
   }
 
-  toJSON() {
-    // TODO handle match rules, query params
-    return {
-      description: this.description,
-      providerStates: this.providerStates,
-      request: {
-        type: this.captured.method,
-        path: this.captured.url,
-        headers: this.captured.requestHeaders,
-        body: JSON.parse(this.captured.requestBody || 'null'),
-      },
-      response: {
-        status: this.captured.status,
-        headers: this.captured.responseHeaders,
-        body: JSON.parse(this.captured.responseText || 'null')
-      }
-    };
+  serialize(version) {
+    assert('Only v3 of the Pact Specification is currently supported', `${version}` === '3');
+    return serializeV3(this);
   }
 }
