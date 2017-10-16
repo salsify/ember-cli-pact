@@ -1,6 +1,8 @@
 import { assert } from '@ember/debug';
 import serializeMatchingRules from './matching-rules';
 
+const VERSION = 3;
+
 export default function serializeV3(interaction) {
   let pact = createPact(interaction);
 
@@ -11,7 +13,7 @@ export default function serializeV3(interaction) {
 
   let requestRules = {};
   let responseRules = {};
-  for (let matchingRules of interaction.matchingRules) {
+  for (let matchingRules of interaction.matchingRules || []) {
     serializeRequestRules(matchingRules.request, requestRules);
     serializeResponseRules(matchingRules.response, responseRules);
   }
@@ -52,10 +54,25 @@ function applyMatchingRules(target, rules) {
 function extractPathAndQuery(pact, url) {
   let questionIndex = url.indexOf('?');
   if (questionIndex !== -1) {
-    pact.request.query = url.substring(questionIndex + 1);
+    pact.request.query = parseQuery(url.substring(questionIndex + 1));
     url = url.substring(0, questionIndex);
   }
   pact.request.path = url;
+}
+
+function parseQuery(query) {
+  let parsed = {};
+  for (let item of query.split('&')) {
+    let pair = item.split('=');
+    let key = decodeURIComponent(pair[0]);
+    let value = decodeURIComponent(pair[1]);
+    if (parsed[key]) {
+      parsed[key].push(value);
+    } else {
+      parsed[key] = [value];
+    }
+  }
+  return parsed;
 }
 
 function serializeRequestRules(source, target) {
@@ -65,10 +82,7 @@ function serializeRequestRules(source, target) {
   serializeRulesForKey(source, target, 'path');
   serializeRulesHashForKey(source, target, 'query');
   serializeRulesHashForKey(source, target, 'header');
-
-  if (source.body) {
-    target.body = serializeMatchingRules(source.body);
-  }
+  serializeRulesForBody(source, target);
 }
 
 function serializeResponseRules(source, target) {
@@ -76,10 +90,7 @@ function serializeResponseRules(source, target) {
 
   normalizeHeaderRules(source);
   serializeRulesHashForKey(source, target, 'header');
-
-  if (source.body) {
-    target.body = serializeMatchingRules(source.body);
-  }
+  serializeRulesForBody(source, target);
 }
 
 function normalizeHeaderRules(rules) {
@@ -90,21 +101,26 @@ function normalizeHeaderRules(rules) {
   }
 }
 
+function serializeRulesForBody(source, target) {
+  if (source.body) {
+    target.body = target.body || {};
+    Object.assign(target.body, serializeMatchingRules(VERSION, source.body));
+  }
+}
+
 function serializeRulesForKey(source, target, key) {
   if (source[key]) {
-    let rules = serializeMatchingRules(source[key]);
+    let rules = serializeMatchingRules(VERSION, source[key]);
     let count = Object.keys(rules).length;
     assert(`Matching rules for ${key} must be for a simple value`, count === 0 || (count === 1 && rules.$));
-    if (rules.$) {
-      target[key] = rules.$;
-    }
+    target[key] = rules.$;
   }
 }
 
 function serializeRulesHashForKey(source, target, key) {
   if (source[key]) {
+    target[key] = {};
     for (let childKey of Object.keys(source[key])) {
-      target[key] = {};
       serializeRulesForKey(source[key], target[key], childKey);
     }
   }

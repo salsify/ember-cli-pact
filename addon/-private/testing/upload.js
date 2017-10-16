@@ -3,7 +3,7 @@ import { v4 as uuid } from 'ember-uuid';
 
 const SESSION_ID = uuid();
 
-export function finalize() {
+export /* istanbul ignore next */ function finalize() {
   return post('finalize', { session: SESSION_ID });
 }
 
@@ -38,9 +38,5 @@ function post(path, body) {
 }
 
 // Use native fetch if available, or fallback to e.g. ember-fetch as a polyfill
-let fetch;
-try {
-  fetch = self.fetch || require('fetch').default;
-} catch (e) {
-  throw new Error('ember-cli-pact requires support for `fetch()`, either natively or via an addon such as ember-fetch');
-}
+// istanbul ignore next: tests run with native fetch
+const fetch = self.fetch || require('fetch').default;

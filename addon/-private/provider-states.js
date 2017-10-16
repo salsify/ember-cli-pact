@@ -7,14 +7,16 @@ export function lookupProviderState(name) {
 }
 
 export function registerProviderState(name, config) {
-  assert(`Don't import provider state modules directly`, currentModule);
   assert(`Duplicate provider state: ${name}`, !(name in STATES));
+  assert(`Don't import provider state modules directly`, currentModule);
   STATES[name] = new ProviderState(name, config);
 }
 
 export function loadProviderStates(config) {
-  if (!loaded) {
-    loaded = true;
+  if (loaded) {
+    assert('Can\'t load provider states with different configuration', loaded === config.modulePrefix);
+  } else {
+    loaded = config.modulePrefix;
 
     // TODO make this configurable?
     let prefix = `${config.modulePrefix}/tests/helpers/pact-provider-states`;
@@ -29,6 +31,7 @@ export function loadProviderStates(config) {
       }
     }
   }
+
   return STATES;
 }
 
@@ -41,6 +44,6 @@ class ProviderState {
 }
 
 let currentModule;
-let loaded = false;
+let loaded = null;
 
 let STATES = Object.create(null);
