@@ -15,7 +15,6 @@
         }
       ],
       "request": {
-        "body": null,
         "headers": {
           "Accept": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
@@ -27,6 +26,7 @@
         "body": {
           "data": {
             "attributes": {
+              "created-at": "1969-07-20T20:18:04.000Z",
               "name": "Alice"
             },
             "id": "1",
@@ -40,6 +40,77 @@
         },
         "headers": {
           "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "listing departments",
+      "providerStates": [
+        {
+          "name": "a department exists",
+          "params": {
+            "id": "1",
+            "name": "People"
+          }
+        },
+        {
+          "name": "a department exists",
+          "params": {
+            "id": "2",
+            "name": "Admin"
+          }
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/departments",
+        "type": "GET"
+      },
+      "response": {
+        "body": {
+          "data": [
+            {
+              "attributes": {
+                "name": "People"
+              },
+              "id": "1",
+              "relationships": {
+                "members": {
+                  "data": [
+                  ]
+                }
+              },
+              "type": "departments"
+            },
+            {
+              "attributes": {
+                "name": "Admin"
+              },
+              "id": "2",
+              "relationships": {
+                "members": {
+                  "data": [
+                  ]
+                }
+              },
+              "type": "departments"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+          }
         },
         "status": 200
       }
@@ -72,7 +143,6 @@
         }
       ],
       "request": {
-        "body": null,
         "headers": {
           "Accept": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
@@ -85,6 +155,7 @@
           "data": [
             {
               "attributes": {
+                "created-at": "1969-07-20T20:18:04.000Z",
                 "name": "Alice"
               },
               "id": "1",
@@ -100,6 +171,7 @@
             },
             {
               "attributes": {
+                "created-at": "1969-07-20T20:18:04.000Z",
                 "name": "Bob"
               },
               "id": "2",
@@ -141,6 +213,65 @@
         "headers": {
           "Content-Type": "application/json"
         },
+        "matchingRules": {
+          "body": {
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "querying people",
+      "providerStates": [
+        {
+          "name": "a person exists",
+          "params": {
+            "id": "1",
+            "name": "Alice"
+          }
+        },
+        {
+          "name": "a person exists",
+          "params": {
+            "id": "2",
+            "name": "Bob"
+          }
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/people",
+        "query": "name=Bob",
+        "type": "GET"
+      },
+      "response": {
+        "body": {
+          "data": [
+            {
+              "attributes": {
+                "created-at": "1969-07-20T20:18:04.000Z",
+                "name": "Bob"
+              },
+              "id": "2",
+              "relationships": {
+                "department": {
+                  "data": null
+                }
+              },
+              "type": "people"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+          }
+        },
         "status": 200
       }
     },
@@ -159,6 +290,7 @@
         "body": {
           "data": {
             "attributes": {
+              "created-at": "1969-07-20T20:18:04.000Z",
               "name": "Alicia"
             },
             "id": "1",
@@ -182,6 +314,7 @@
         "body": {
           "data": {
             "attributes": {
+              "created-at": "1969-07-20T20:18:04.000Z",
               "name": "Alicia"
             },
             "id": "1",
@@ -195,6 +328,10 @@
         },
         "headers": {
           "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+          }
         },
         "status": 200
       }

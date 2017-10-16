@@ -9,10 +9,10 @@ import { Promise } from 'rsvp'
 import { uploadInteraction, finalize } from './upload';
 
 export default class PactTestModule extends TestModule {
-  constructor(_, description, callbacks = {}) {
+  constructor(name, description, callbacks = {}) {
     callbacks.integration = true;
 
-    super('pact:-', description, callbacks);
+    super('pact:-', description || name, callbacks);
 
     assert(`ember-cli-pact doesn't currently support testing multiple consumers`, !callbacks.consumerName);
 
@@ -32,13 +32,14 @@ export default class PactTestModule extends TestModule {
 
     context.provider = () => provider;
     context.given = (name, params) => provider.addState(name, params);
-    context.interaction = (options) => provider.specifyInteraction(context, this._normalize(options));
+    context.interaction = (perform) => provider.specifyInteraction(context, perform);
+    context.matchingRules = (rules) => provider.specifyMatchingRules(rules);
 
     provider.startInteraction(test.testName);
   }
 
   teardownProvider() {
-    let interaction = this.provider.interaction;
+    let interaction = this.provider.interaction.serialize(this._getConfigValue('pactVersion'));
     let upload = uploadInteraction(interaction, {
       provider: this._getConfigValue('providerName'),
       consumer: this._getConfigValue('consumerName')
@@ -57,14 +58,6 @@ export default class PactTestModule extends TestModule {
 
   _getConfigValue(key) {
     return key in this.callbacks ? this.callbacks[key] : this._config()['ember-cli-pact'][key];
-  }
-
-  _normalize(details) {
-    if (typeof details === 'function') {
-      return { perform: details };
-    }
-
-    return details;
   }
 
   _loadMockProvider() {
@@ -88,8 +81,8 @@ function registerFinalizeCallback() {
     Testem.afterTests((config, data, callback) => {
       Promise.all(uploads)
         .then(() => finalize())
-        .then(() => callback())
-        .catch((error) => setTimeout(() => { throw error; }));
+        .catch((error) => setTimeout(() => { throw error; }))
+        .then(() => setTimeout(callback));
     });
   }
 }

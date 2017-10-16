@@ -15,9 +15,11 @@ define('ember-qunit', [], function() {
   };
 });
 
-define('ember-qunit/qunit-module', [], function() {
+define('qunit', [], function() {
   return {
     __esModule: true,
-    createModule: function() {}
+    isFake: true,
+    module: function() {},
+    test: function() {}
   };
 });

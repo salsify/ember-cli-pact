@@ -17,6 +17,17 @@ test('listing people', async function(assert) {
   assert.deepEqual([...people.mapBy('department.name')], ['People', 'People']);
 });
 
+test('querying people', async function(assert) {
+  this.given('a person exists', { id: '1', name: 'Alice' });
+  this.given('a person exists', { id: '2', name: 'Bob' });
+
+  let people = await this.interaction(() => this.store().query('person', { name: 'Bob' }));
+
+  assert.equal(people.get('length'), 1);
+  assert.equal(people.get('firstObject.id'), '2');
+  assert.equal(people.get('firstObject.name'), 'Bob');
+});
+
 test('fetching a person by ID', async function(assert) {
   this.given('a person exists', { id: '1', name: 'Alice' });
 

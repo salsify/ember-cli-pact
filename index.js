@@ -11,7 +11,8 @@ module.exports = {
         providerName: 'provider',
         consumerName: this.project.name(),
         pactsDirectory: 'pacts',
-        mode: process.env.PACT_MODE || (process.env.CI ? 'verify' : 'write')
+        mode: process.env.PACT_MODE || (process.env.CI ? 'verify' : 'write'),
+        pactVersion: 3
       }
     };
   },

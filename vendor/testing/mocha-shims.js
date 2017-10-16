@@ -10,6 +10,7 @@ define('chai', [], function() {
 define('mocha', [], function() {
   return {
     __esModule: true,
+    isFake: true,
     it: function() {},
     describe: function() {}
   };
@@ -19,12 +20,5 @@ define('ember-mocha', [], function() {
   return {
     __esModule: true,
     setResolver: function() {}
-  };
-});
-
-define('ember-mocha/setup-test-factory', [], function() {
-  return {
-    __esModule: true,
-    default: function() {}
   };
 });
