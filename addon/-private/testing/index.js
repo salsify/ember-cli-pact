@@ -19,9 +19,6 @@ export function moduleForPact(name, description, callbacks) {
 
 // Mocha-style setupTest hook
 export function setupPactTest(...args) {
-  // Hook for our own tests to determine which test framework we're mocking
-  if (require('mocha').isFake) return;
-
   let { beforeEach } = require('mocha');
   let setupTestFactory = require('ember-mocha/setup-test-factory').default;
   let test;

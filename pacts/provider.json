@@ -43,6 +43,14 @@
         },
         "matchingRules": {
           "body": {
+            "$.data.created-at": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -215,6 +223,14 @@
         },
         "matchingRules": {
           "body": {
+            "$.data[*].created-at": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -244,7 +260,11 @@
           "X-Requested-With": "XMLHttpRequest"
         },
         "path": "/people",
-        "query": "name=Bob",
+        "query": {
+          "name": [
+            "Bob"
+          ]
+        },
         "type": "GET"
       },
       "response": {
@@ -270,6 +290,14 @@
         },
         "matchingRules": {
           "body": {
+            "$.data[*].created-at": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -331,6 +359,14 @@
         },
         "matchingRules": {
           "body": {
+            "$.data.created-at": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                }
+              ]
+            }
           }
         },
         "status": 200

@@ -11,7 +11,8 @@ define('ember-qunit', [], function() {
   return {
     __esModule: true,
     setResolver: function() {},
-    test: function() {}
+    moduleFor: function() {},
+    test: function() {},
   };
 });
 
