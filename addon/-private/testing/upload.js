@@ -38,5 +38,4 @@ function post(path, body) {
 }
 
 // Use native fetch if available, or fallback to e.g. ember-fetch as a polyfill
-// istanbul ignore next: tests run with native fetch
-const fetch = self.fetch || require('fetch').default;
+const fetch = self.fetch || /* istanbul ignore next */ require('fetch').default;
