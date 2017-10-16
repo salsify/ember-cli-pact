@@ -1,4 +1,4 @@
-# ember-cli-pact
+# ember-cli-pact [![Build Status](https://travis-ci.org/salsify/ember-cli-pact.svg?branch=master)](https://travis-ci.org/salsify/ember-cli-pact) [![Coverage Status](https://coveralls.io/repos/github/salsify/ember-cli-pact/badge.svg)](https://coveralls.io/github/salsify/ember-cli-pact)
 
 This README outlines the details of collaborating on this Ember addon.
 

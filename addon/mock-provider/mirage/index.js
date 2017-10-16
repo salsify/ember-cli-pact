@@ -57,6 +57,7 @@ export default class MirageProvider extends MockProvider {
       let { startMirage } = require(`${modulePrefix}/initializers/ember-cli-mirage`);
       this.server = startMirage();
     } catch (error) {
+      // istanbul ignore next: mirage will always be around in our tests
       throw new Error(`Unable to start mirage server; is ember-cli-mirage installed? ${error.message}`);
     }
   }
