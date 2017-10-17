@@ -3,6 +3,7 @@
 - [Overview](#overview)
   - [What Does a Pact Test Look Like?](#what-does-a-pact-test-look-like)
   - [Terminology](#terminology)
+- [Installation](#installation)
 - [Usage](#usage)
   - [Writing Pact Tests](#writing-pact-tests)
   - [Provider States](#provider-states)
@@ -47,7 +48,7 @@ test('locating a person by ID', async function(assert) {
   // fetching a particular person record by ID.
   let person = await this.interaction(() => this.store().findRecord('person', '123'));
 
-  // Verify that the response we received contained the data we expected, and  that
+  // Verify that the response we received contained the data we expected, and that
   // we interpreted it correctly.
   assert.equal(person.get('id'), '123');
   assert.equal(person.get('name'), 'Alice');
@@ -116,6 +117,16 @@ Additional tests of interactions with this provider would add further elements t
  - The _consumer_ is the system that initiates requests. In the case of ember-cli-pact, this is typically your Ember app.
  - The _producer_ is the system that fulfills request. In the case of ember-cli-pact, this is typically an HTTP API of some sort.
  - An _interaction_ captures the contents of a request from the consumer and the corresponding response from the provider. They may also include additional matching rules that loosen the definition of what constitutes an acceptable "replay" of that interaction.
+
+## Installation
+
+To get started, run:
+
+```sh
+ember install ember-cli-pact
+```
+
+Depending on your choice of [mock provider](#mock-providers), you'll likely also want to install either [ember-cli-mirage](https://github.com/samselikoff/ember-cli-mirage) or [ember-cli-pretender](https://github.com/rwjblue/ember-cli-pretender).
 
 ## Usage
 
