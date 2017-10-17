@@ -8,6 +8,7 @@
   - [Provider States](#provider-states)
   - [Matching Rules](#matching-rules)
   - [Write vs Verify](#write-vs-verify)
+  - [Customizing Interactions](#customizing-interactions)
   - [Publishing Pacts](#publishing-pacts)
 - [Configuration](#configuration)
 - [Mock Providers](#mock-providers)
@@ -19,7 +20,7 @@
 
 [Pact](https://docs.pact.io) is a family of frameworks for performing [consumer-driven contract testing](https://martinfowler.com/articles/consumerDrivenContracts.html). It allows you to set up interactions between a _consumer_ and a _provider_ (i.e. a client and a server) and then verify them independently.
 
-In concrete terms with an Ember app, it lets you mock your API with tools [Mirage](https://ember-cli-mirage.com) or [Pretender](https://github.com/pretenderjs/pretender), then verify that your mock API behaves the same way as the real one without forcing you to test your app and your API at the same time!
+In concrete terms with an Ember app, it lets you mock your API with tools like [Mirage](https://ember-cli-mirage.com) or [Pretender](https://github.com/pretenderjs/pretender), then verify that your mock API behaves the same way as the real one without forcing you to test your app and your API at the same time!
 
 ### What Does a Pact Test Look Like?
 
@@ -295,6 +296,31 @@ The Pact mode can be overwritten via [a configuration option](#configuration) or
 PACT_MODE=verify ember test
 ```
 
+### Customizing Recorded Interactions
+
+Before the details of an interaction are uploaded to the test server to be written or verified, you may wish to tweak the payload. The [mock provider](#mock-providers) provides a `beforeUpload` hook that you can use to accomplish this.
+
+The provided callback will receive a JSON representation of the interaction that you can tweak however you like. For instance, if you wish to exclude a certain request header from being recorded for a test, you could write:
+
+```js
+this.provider().beforeUpload((interaction) => {
+  delete interaction.request.headers['X-Dont-Save-Me'];
+});
+```
+
+If you wanted to do this for every single interaction in your test suite, you could implement a [custom mock provider](#custom-mock-providers):
+
+```js
+export default class SecretiveProvider extends SomeBaseProvider {
+  constructor() {
+    super(...arguments);
+    this.beforeUpload((interaction) => {
+      delete interaction.request.headers['X-Dont-Save-Me'];
+    });
+  }
+}
+```
+
 ### Publishing Pacts
 
 Pact verification can be run against contracts persisted in a number of places, including as files on disk, in a git remote, or from a Web server. One commonly used option, however, is a [Pact Broker](https://github.com/pact-foundation/pact_broker).
@@ -359,6 +385,25 @@ export default class ApplicationSerializer extends PactEnabled(MyBaseSerializer)
 
 }
 ```
+
+#### Provider States
+
+The Mirage mock provider requires that all provider states be declared using the `providerState` helper. Provider state definitions will be loaded from all modules `tests/helpers/pact-provider-states`, so within that directory you can organize them however you see fit.
+
+When you activate a provider state with `this.given()`, the configured callback for that state will be invoked with the running Mirage server in order for the server to be set up in that state.
+
+For instance, the `'a person exists'` provider state described above could be declared like this:
+
+```js
+// tests/helpers/pact-provider-states/people.js
+import { providerState } from 'ember-cli-pact';
+
+providerState('a person exists', (server, { id, name }) => {
+  server.create('person', { id, name });
+});
+```
+
+Then, when a test adds a requirement for the `'a person exists'` provider state, the Mirage server will automatically be ready to serve the corresponding person record.
 
 #### Model Attribute Matching Rules
 

@@ -23,8 +23,7 @@
       ],
       "request": {
         "headers": {
-          "Accept": "application/vnd.api+json",
-          "X-Requested-With": "XMLHttpRequest"
+          "Accept": "application/vnd.api+json"
         },
         "method": "GET",
         "path": "/departments"

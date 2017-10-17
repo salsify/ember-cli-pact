@@ -9,7 +9,21 @@ export default class MockProvider {
   constructor(config) {
     this.config = config;
     this.interaction = null;
+    this._uploadCallbacks = [];
     this._capturing = false;
+  }
+
+  /**
+   * Adds a callback that will be invoked before uploading the current interaction.
+   * This callback will receive the serialized interaction and may mutate it in place
+   * to affect the final data sent to be written/verified.
+   *
+   * @public
+   * @method beforeUpload
+   * @param {Function} callback
+   */
+  beforeUpload(callback) {
+    this._uploadCallbacks.push(callback);
   }
 
   /**
@@ -97,5 +111,22 @@ export default class MockProvider {
    */
   specifyMatchingRules(rules) {
     this.interaction.addMatchingRules(rules);
+  }
+
+  /**
+   * Serializes the current interaction to be uploaded, invoking any registered
+   * `beforeUpload` callbacks first.
+   *
+   * @public
+   * @method serializeInteraction
+   * @param {number} version the Pact specification version to use when serializing
+   * @return {object} the serialized interaction
+   */
+  serializeInteraction(version) {
+    let serialized = this.interaction.serialize(version);
+    for (let callback of this._uploadCallbacks) {
+      callback(serialized);
+    }
+    return serialized;
   }
 }
