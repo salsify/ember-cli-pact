@@ -23,6 +23,28 @@ test('serializing path and query params', function(assert) {
   assert.equal('query' in pact.request, false);
 });
 
+test('serializing request method', function(assert) {
+  let pact = serializeV3({
+    captured: {
+      url: '',
+      method: 'GET'
+    }
+  });
+
+  assert.equal(pact.request.method, 'GET');
+});
+
+test('serializing respone status', function(assert) {
+  let pact = serializeV3({
+    captured: {
+      url: '',
+      status: 200
+    }
+  });
+
+  assert.equal(pact.response.status, 200);
+});
+
 test('serializing description and provider states', function(assert) {
   let pact = serializeV3({
     captured: { url: '' },

@@ -29,7 +29,7 @@ function createPact(interaction) {
     description: interaction.description,
     providerStates: interaction.providerStates,
     request: {
-      type: interaction.captured.method,
+      method: interaction.captured.method,
       headers: interaction.captured.requestHeaders
     },
     response: {

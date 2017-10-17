@@ -1,6 +1,6 @@
 {
   "consumer": {
-    "name": "ember-cli-pact"
+    "name": "test-consumer"
   },
   "interactions": [
     {
@@ -19,8 +19,8 @@
           "Accept": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
-        "path": "/people/1",
-        "type": "GET"
+        "method": "GET",
+        "path": "/people/1"
       },
       "response": {
         "body": {
@@ -51,73 +51,6 @@
                 }
               ]
             }
-          }
-        },
-        "status": 200
-      }
-    },
-    {
-      "description": "listing departments",
-      "providerStates": [
-        {
-          "name": "a department exists",
-          "params": {
-            "id": "1",
-            "name": "People"
-          }
-        },
-        {
-          "name": "a department exists",
-          "params": {
-            "id": "2",
-            "name": "Admin"
-          }
-        }
-      ],
-      "request": {
-        "headers": {
-          "Accept": "application/vnd.api+json",
-          "X-Requested-With": "XMLHttpRequest"
-        },
-        "path": "/departments",
-        "type": "GET"
-      },
-      "response": {
-        "body": {
-          "data": [
-            {
-              "attributes": {
-                "name": "People"
-              },
-              "id": "1",
-              "relationships": {
-                "members": {
-                  "data": [
-                  ]
-                }
-              },
-              "type": "departments"
-            },
-            {
-              "attributes": {
-                "name": "Admin"
-              },
-              "id": "2",
-              "relationships": {
-                "members": {
-                  "data": [
-                  ]
-                }
-              },
-              "type": "departments"
-            }
-          ]
-        },
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "matchingRules": {
-          "body": {
           }
         },
         "status": 200
@@ -155,8 +88,8 @@
           "Accept": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
-        "path": "/people",
-        "type": "GET"
+        "method": "GET",
+        "path": "/people"
       },
       "response": {
         "body": {
@@ -259,13 +192,13 @@
           "Accept": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
+        "method": "GET",
         "path": "/people",
         "query": {
           "name": [
             "Bob"
           ]
-        },
-        "type": "GET"
+        }
       },
       "response": {
         "body": {
@@ -335,8 +268,8 @@
           "Content-Type": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
-        "path": "/people/1",
-        "type": "PATCH"
+        "method": "PATCH",
+        "path": "/people/1"
       },
       "response": {
         "body": {
@@ -379,6 +312,6 @@
     }
   },
   "provider": {
-    "name": "provider"
+    "name": "test-provider"
   }
 }
