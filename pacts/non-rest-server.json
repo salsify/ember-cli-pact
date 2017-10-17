@@ -1,0 +1,54 @@
+{
+  "consumer": {
+    "name": "ember-cli-pact"
+  },
+  "interactions": [
+    {
+      "description": "stopping an import",
+      "providerStates": [
+        {
+          "name": "an import is running"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "*/*",
+          "Content-Type": "text/plain;charset=UTF-8",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "path": "/imports/current/stop",
+        "type": "PUT"
+      },
+      "response": {
+        "body": {
+          "lastUpdated": "2015-10-21T00:00:00.000Z",
+          "status": "stopped"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.lastUpdated": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-specification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "non-rest-server"
+  }
+}

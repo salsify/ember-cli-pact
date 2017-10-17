@@ -9,7 +9,12 @@ import { Promise } from 'rsvp'
 import { uploadInteraction, finalize } from './upload';
 
 export default class PactTestModule extends TestModule {
-  constructor(name, description, callbacks = {}) {
+  constructor(name, description, callbacks) {
+    if (!callbacks && typeof description === 'object') {
+      callbacks = description;
+      description = null;
+    }
+
     callbacks.integration = true;
 
     super('pact:-', description || name, callbacks);
