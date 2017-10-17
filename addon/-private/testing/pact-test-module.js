@@ -49,7 +49,7 @@ export default class PactTestModule extends TestModule {
   }
 
   teardownProvider() {
-    let interaction = this.provider.interaction.serialize(this._getConfigValue('pactVersion'));
+    let interaction = this.provider.serializeInteraction(this._getConfigValue('pactVersion'));
     let upload = uploadInteraction(interaction, {
       provider: this._getConfigValue('providerName'),
       consumer: this._getConfigValue('consumerName')

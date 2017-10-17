@@ -10,6 +10,10 @@ describe('Pact | Departments', function() {
   beforeEach(function() {
     this.given('a department exists', { id: '1', name: 'People' });
     this.given('a department exists', { id: '2', name: 'Admin' });
+
+    this.provider().beforeUpload((interaction) => {
+      delete interaction.request.headers['X-Requested-With'];
+    });
   });
 
   it('listing departments', async function() {

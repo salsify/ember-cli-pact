@@ -8,6 +8,7 @@
   - [Provider States](#provider-states)
   - [Matching Rules](#matching-rules)
   - [Write vs Verify](#write-vs-verify)
+  - [Customizing Interactions](#customizing-interactions)
   - [Publishing Pacts](#publishing-pacts)
 - [Configuration](#configuration)
 - [Mock Providers](#mock-providers)
@@ -293,6 +294,31 @@ The Pact mode can be overwritten via [a configuration option](#configuration) or
 
 ```sh
 PACT_MODE=verify ember test
+```
+
+### Customizing Recorded Interactions
+
+Before the details of an interaction are uploaded to the test server to be written or verified, you may wish to tweak the payload. The [mock provider](#mock-providers) provides a `beforeUpload` hook that you can use to accomplish this.
+
+The provided callback will receive a JSON representation of the interaction that you can tweak however you like. For instance, if you wish to exclude a certain request header from being recorded for a test, you could write:
+
+```js
+this.provider().beforeUpload((interaction) => {
+  delete interaction.request.headers['X-Dont-Save-Me'];
+});
+```
+
+If you wanted to do this for every single interaction in your test suite, you could implement a [custom mock provider](#custom-mock-providers):
+
+```js
+export default class SecretiveProvider extends SomeBaseProvider {
+  constructor() {
+    super(...arguments);
+    this.beforeUpload((interaction) => {
+      delete interaction.request.headers['X-Dont-Save-Me'];
+    });
+  }
+}
 ```
 
 ### Publishing Pacts
