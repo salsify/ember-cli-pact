@@ -3,6 +3,7 @@
 /dist
 /tests
 /tmp
+/pacts
 /vendor/testing
 **/.gitkeep
 .bowerrc
