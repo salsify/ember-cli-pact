@@ -23,7 +23,6 @@ function post(path, body) {
     body: JSON.stringify(body)
   };
 
-
   return fetch(`/_pact/${path}`, options)
     .then((result) => {
       if (!result.ok) {
