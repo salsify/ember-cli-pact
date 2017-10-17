@@ -20,7 +20,7 @@
 
 [Pact](https://docs.pact.io) is a family of frameworks for performing [consumer-driven contract testing](https://martinfowler.com/articles/consumerDrivenContracts.html). It allows you to set up interactions between a _consumer_ and a _provider_ (i.e. a client and a server) and then verify them independently.
 
-In concrete terms with an Ember app, it lets you mock your API with tools [Mirage](https://ember-cli-mirage.com) or [Pretender](https://github.com/pretenderjs/pretender), then verify that your mock API behaves the same way as the real one without forcing you to test your app and your API at the same time!
+In concrete terms with an Ember app, it lets you mock your API with tools like [Mirage](https://ember-cli-mirage.com) or [Pretender](https://github.com/pretenderjs/pretender), then verify that your mock API behaves the same way as the real one without forcing you to test your app and your API at the same time!
 
 ### What Does a Pact Test Look Like?
 
@@ -385,6 +385,25 @@ export default class ApplicationSerializer extends PactEnabled(MyBaseSerializer)
 
 }
 ```
+
+#### Provider States
+
+The Mirage mock provider requires that all provider states be declared using the `providerState` helper. Provider state definitions will be loaded from all modules `tests/helpers/pact-provider-states`, so within that directory you can organize them however you see fit.
+
+When you activate a provider state with `this.given()`, the configured callback for that state will be invoked with the running Mirage server in order for the server to be set up in that state.
+
+For instance, the `'a person exists'` provider state described above could be declared like this:
+
+```js
+// tests/helpers/pact-provider-states/people.js
+import { providerState } from 'ember-cli-pact';
+
+providerState('a person exists', (server, { id, name }) => {
+  server.create('person', { id, name });
+});
+```
+
+Then, when a test adds a requirement for the `'a person exists'` provider state, the Mirage server will automatically be ready to serve the corresponding person record.
 
 #### Model Attribute Matching Rules
 
