@@ -384,7 +384,7 @@ To enable the Mirage mock provider, you'll need to wrap your Mirage application 
 ```js
 // mirage/serializers/application.js
 import { MyBaseSerializer } from 'ember-cli-mirage';
-import PactEnabled from 'ember-cli-pact/mock-provider/mirage';
+import { PactEnabled } from 'ember-cli-pact/mock-provider/mirage';
 
 export default PactEnabled(MyBaseSerializer).extend({
 
