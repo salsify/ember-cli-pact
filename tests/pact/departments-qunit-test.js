@@ -2,6 +2,8 @@ import { test } from 'ember-qunit';
 import { moduleForPact } from 'ember-cli-pact';
 
 moduleForPact('Pact | Departments', {
+  providerName: 'departments-server',
+
   beforeEach() {
     this.given('a department exists', { id: '1', name: 'People' });
     this.given('a department exists', { id: '2', name: 'Admin' });

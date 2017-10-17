@@ -1,6 +1,6 @@
 {
   "consumer": {
-    "name": "ember-cli-pact"
+    "name": "test-consumer"
   },
   "interactions": [
     {
@@ -16,8 +16,8 @@
           "Content-Type": "text/plain;charset=UTF-8",
           "X-Requested-With": "XMLHttpRequest"
         },
-        "path": "/imports/current/stop",
-        "type": "PUT"
+        "method": "PUT",
+        "path": "/imports/current/stop"
       },
       "response": {
         "body": {

@@ -4,36 +4,41 @@ import require from 'require';
 import { TestModule } from 'ember-test-helpers';
 import { getOwner } from '@ember/application';
 import { assert } from '@ember/debug';
+import { camelize } from '@ember/string';
 import { Promise } from 'rsvp'
 
 import { uploadInteraction, finalize } from './upload';
 
 export default class PactTestModule extends TestModule {
   constructor(name, description, callbacks) {
-    if (!callbacks && typeof description === 'object') {
+    if (typeof description === 'object' && !callbacks) {
       callbacks = description;
       description = null;
+    } else {
+      callbacks = callbacks || {};
     }
 
     callbacks.integration = true;
 
     super('pact:-', description || name, callbacks);
 
-    assert(`ember-cli-pact doesn't currently support testing multiple consumers`, !callbacks.consumerName);
-
-    this.setupSteps.push(this.setupStore);
+    this.setupSteps.push(this.setupServices);
     this.setupSteps.push(this.setupProvider);
     this.teardownSteps.push(this.teardownProvider);
   }
 
-  setupStore() {
-    this.context.store = () => this.container.lookup('service:store');
+  setupServices() {
+    for (let service of this._getConfigValue('serviceInjections')) {
+      this.context[camelize(service)] = () => this.container.lookup(`service:${service}`);
+    }
   }
 
   setupProvider({ test }) {
     let { context } = this;
     let MockProvider = this._loadMockProvider();
     let provider = this.provider = new MockProvider(this._config());
+
+    this._assertSingleConsumerName();
 
     context.provider = () => provider;
     context.given = (name, params) => provider.addState(name, params);
@@ -69,6 +74,13 @@ export default class PactTestModule extends TestModule {
     let { modulePrefix } = this._config();
     let name = this._getConfigValue('mockProvider');
     return require(`${modulePrefix}/tests/helpers/pact-providers/${name}`).default;
+  }
+
+  _assertSingleConsumerName() {
+    let localConsumerName = this.callbacks.consumerName;
+    let globalConsumerName = this._config()['ember-cli-pact'].consumerName;
+    let hasOverriddenConsumer = localConsumerName && localConsumerName !== globalConsumerName;
+    assert(`ember-cli-pact doesn't currently support testing multiple consumers`, !hasOverriddenConsumer);
   }
 }
 

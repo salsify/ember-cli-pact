@@ -3,7 +3,9 @@ import { assert } from 'chai';
 import { setupPactTest } from 'ember-cli-pact';
 
 describe('Pact | Departments', function() {
-  setupPactTest();
+  setupPactTest({
+    providerName: 'departments-server'
+  });
 
   beforeEach(function() {
     this.given('a department exists', { id: '1', name: 'People' });

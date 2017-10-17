@@ -1,5 +1,6 @@
 import require from 'require';
 import { v4 as uuid } from 'ember-uuid';
+import { assert } from '@ember/debug';
 
 const SESSION_ID = uuid();
 
@@ -8,6 +9,8 @@ export /* istanbul ignore next */ function finalize() {
 }
 
 export function uploadInteraction(interaction, options) {
+  assert('You must configure a provider name', options.provider);
+
   return post('upload', {
     session: SESSION_ID,
     provider: options.provider,
