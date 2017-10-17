@@ -307,6 +307,7 @@ Before ember-cli-pact reaches a stable 1.0 release, the intent is to expose an e
 
 The primary means of configuring ember-cli-pact is by defining an `ember-cli-pact` key in your `config/environment.js` containing a hash of the options here. In most cases, you can also pass overriding values for these options on a per-test basis to `moduleForPact`/`setupPactTest`.
 
+ - `enabled`: whether ember-cli-pact and its dependencies should be included in the build; defaults to `true` except when the build environment is `production`
  - `providerName`: the name of the provider under test
  - `consumerName`: the name of the consumer (i.e. your app) under test; defaults to the ember-cli project name
  - `mockProvider`: the name of the mock provider that should be started up for each Pact test (see the [Mock Providers](#mock-providers) section below); defaults to `'mirage'`
