@@ -1,9 +1,11 @@
 import { describe, it, beforeEach } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { setupPact } from 'ember-cli-pact';
 import { assert } from 'chai';
-import { setupPactTest } from 'ember-cli-pact';
 
 describe('Pact | Departments', function() {
-  setupPactTest({
+  setupTest({ integration: true });
+  setupPact({
     providerName: 'departments-server'
   });
 

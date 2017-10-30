@@ -1,11 +1,13 @@
 import { describe, it } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { setupPact } from 'ember-cli-pact';
 import { assert } from 'chai';
-import { setupPactTest } from 'ember-cli-pact';
 import { regex } from 'ember-cli-pact/matchers';
 import $ from 'jquery';
 
 describe('Pact | Imports', function() {
-  setupPactTest({
+  setupTest({ integration: true });
+  setupPact({
     mockProvider: 'pretender',
     providerName: 'non-rest-server'
   });

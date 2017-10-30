@@ -28,30 +28,34 @@ In concrete terms with an Ember app, it lets you mock your API with tools like [
 Below is an annotated example of a simple Pact test. Note that, while this example uses Ember Data, Mirage and QUnit, you could just as easily write a comparable test with GraphQL, Pretender and Mocha.
 
 ```js
-import { moduleForPact } from 'ember-cli-pact';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+import { setupPact } from 'ember-cli-pact';
 
-moduleForPact('Pact | People', {
-  // Specify the names of the provider and consumer whose interactions are being set up.
-  // Normally these values would be defaulted from global configuration for your app.
-  provider: 'my-api',
-  consumer: 'my-app'
-});
+module('Pact | People', function(hooks) {
+  setupTest(hooks);
+  setupPact(hooks, {
+    // Specify the names of the provider and consumer whose interactions are being set up.
+    // Normally these values would be defaulted from global configuration for your app.
+    provider: 'my-api',
+    consumer: 'my-app'
+  });
 
-test('locating a person by ID', async function(assert) {
-  // Record the state(s) the provider should be in prior to the interaction under test.
-  // When verifying the generated pact document against the 'my-api' provider later,
-  // its own 'a person exists' state will be invoked with the same parameters.
-  this.given('a person exists', { id: '123', name: 'Alice' });
+  test('locating a person by ID', async function(assert) {
+    // Record the state(s) the provider should be in prior to the interaction under test.
+    // When verifying the generated pact document against the 'my-api' provider later,
+    // its own 'a person exists' state will be invoked with the same parameters.
+    this.given('a person exists', { id: '123', name: 'Alice' });
 
-  // Perform the interaction that this test is intended to record, in this case
-  // fetching a particular person record by ID.
-  let person = await this.interaction(() => this.store().findRecord('person', '123'));
+    // Perform the interaction that this test is intended to record, in this case
+    // fetching a particular person record by ID.
+    let person = await this.interaction(() => this.store().findRecord('person', '123'));
 
-  // Verify that the response we received contained the data we expected, and that
-  // we interpreted it correctly.
-  assert.equal(person.get('id'), '123');
-  assert.equal(person.get('name'), 'Alice');
+    // Verify that the response we received contained the data we expected, and that
+    // we interpreted it correctly.
+    assert.equal(person.get('id'), '123');
+    assert.equal(person.get('name'), 'Alice');
+  });  
 });
 ```
 
@@ -183,17 +187,23 @@ The `provider` method allows access to the mock provider instance for the curren
 
 #### QUnit Module Setup
 
+Note that this addon relies on the [simplified QUnit testing API](http://rwjblue.com/2017/10/23/ember-qunit-simplication/), meaning it requires your `ember-cli-qunit` version to be at least `4.1.0-beta.2`.
+
 ```js
 // tests/pact/people-test.js
-import { moduleForPact } from 'ember-cli-pact';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+import { setupPact } from 'ember-cli-pact';
 
-moduleForPact('Pact | People', {
-  // optional module-specific configuration here
-});
+module('Pact | People', function(hooks) {
+  setupTest(hooks);
+  setupPact(hooks, {
+    // optional module-specific configuration here  
+  });
 
-test('...', function(assert) {
-  // ...
+  test('...', function(assert) {
+    // ...
+  });
 });
 ```
 
@@ -201,11 +211,13 @@ test('...', function(assert) {
 
 ```js
 // tests/pact/people-test.js
-import { setupPactTest } from 'ember-cli-pact';
 import { describe, it } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { setupPact } from 'ember-cli-pact';
 
 describe('Pact | People', function() {
-  setupPactTest({
+  setupTest({ integration: true });
+  setupPact({
     // optional module-specific configuration here
   });
 
@@ -342,7 +354,7 @@ Before ember-cli-pact reaches a stable 1.0 release, the intent is to expose an e
 
 ## Configuration
 
-The primary means of configuring ember-cli-pact is by defining an `ember-cli-pact` key in your `config/environment.js` containing a hash of the options here. In most cases, you can also pass overriding values for these options on a per-test basis to `moduleForPact`/`setupPactTest`.
+The primary means of configuring ember-cli-pact is by defining an `ember-cli-pact` key in your `config/environment.js` containing a hash of the options here. In most cases, you can also pass overriding values for these options on a per-test basis `setupPact`.
 
  - `enabled`: whether ember-cli-pact and its dependencies should be included in the build; defaults to `true` except when the build environment is `production`
  - `providerName`: the name of the provider under test

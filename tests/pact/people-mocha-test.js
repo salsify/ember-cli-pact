@@ -1,11 +1,12 @@
 import { describe, it } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { setupPact } from 'ember-cli-pact';
 import { assert } from 'chai';
-import { setupPactTest } from 'ember-cli-pact';
-
 import { run } from '@ember/runloop';
 
 describe('Pact | People', function() {
-  setupPactTest();
+  setupTest({ integration: true });
+  setupPact();
 
   it('listing people', async function() {
     this.given('a department exists', { id: '1', name: 'People' });
