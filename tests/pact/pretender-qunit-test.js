@@ -1,6 +1,6 @@
 import { test, module } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupPact } from 'ember-cli-pact';
+import { setupPact, given, interaction, getProvider } from 'ember-cli-pact';
 import { regex } from 'ember-cli-pact/matchers';
 import $ from 'jquery';
 
@@ -12,8 +12,8 @@ module('Pact | Imports', function(hooks) {
   });
 
   test('stopping an import', async function(assert) {
-    this.given('an import is running');
-    this.provider().map((pretender) => {
+    given('an import is running');
+    getProvider().map((pretender) => {
       pretender.put('/imports/current/stop', () => {
         return [200, { 'Content-Type': 'application/json' }, JSON.stringify({
           status: 'stopped',
@@ -22,7 +22,7 @@ module('Pact | Imports', function(hooks) {
       });
     });
 
-    this.matchingRules({
+    getProvider().specifyMatchingRules({
       response: {
         body: {
           lastUpdated: regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
@@ -30,7 +30,7 @@ module('Pact | Imports', function(hooks) {
       }
     });
 
-    let response = await this.interaction(() => $.ajax('/imports/current/stop', { method: 'PUT' }));
+    let response = await interaction(() => $.ajax('/imports/current/stop', { method: 'PUT' }));
 
     assert.deepEqual(response, {
       status: 'stopped',

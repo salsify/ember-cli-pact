@@ -1,5 +1,6 @@
 import { assert } from '@ember/debug';
 import { run } from '@ember/runloop';
+import { getContext } from 'ember-test-helpers';
 import { Promise } from 'rsvp';
 
 import Interaction from 'ember-cli-pact/-private/interaction';
@@ -93,10 +94,10 @@ export default class MockProvider {
    * @param {object} context the `this` value for the perform callback
    * @param {function} perform the callback to be invoked to capture this interaction
    */
-  specifyInteraction(context, perform) {
+  specifyInteraction(perform) {
     return Promise.resolve().then(() => {
       this._capturing = true;
-      return run(() => perform.call(context));
+      return run(() => perform.call(getContext()));
     }).finally(() => {
       this._capturing = false;
     });

@@ -1,6 +1,6 @@
 import { describe, it } from 'mocha';
 import { setupTest } from 'ember-mocha';
-import { setupPact } from 'ember-cli-pact';
+import { setupPact, given, interaction } from 'ember-cli-pact';
 import { assert } from 'chai';
 import { run } from '@ember/runloop';
 
@@ -9,11 +9,11 @@ describe('Pact | People', function() {
   setupPact();
 
   it('listing people', async function() {
-    this.given('a department exists', { id: '1', name: 'People' });
-    this.given('a person exists', { id: '1', name: 'Alice', departmentId: '1' });
-    this.given('a person exists', { id: '2', name: 'Bob', departmentId: '1' });
+    given('a department exists', { id: '1', name: 'People' });
+    given('a person exists', { id: '1', name: 'Alice', departmentId: '1' });
+    given('a person exists', { id: '2', name: 'Bob', departmentId: '1' });
 
-    let people = await this.interaction(() => this.store().findAll('person'));
+    let people = await interaction(() => this.store().findAll('person'));
 
     assert.deepEqual([...people.mapBy('id')], ['1', '2']);
     assert.deepEqual([...people.mapBy('name')], ['Alice', 'Bob']);
@@ -21,10 +21,10 @@ describe('Pact | People', function() {
   });
 
   it('querying people', async function() {
-    this.given('a person exists', { id: '1', name: 'Alice' });
-    this.given('a person exists', { id: '2', name: 'Bob' });
+    given('a person exists', { id: '1', name: 'Alice' });
+    given('a person exists', { id: '2', name: 'Bob' });
 
-    let people = await this.interaction(() => this.store().query('person', { name: 'Bob' }));
+    let people = await interaction(() => this.store().query('person', { name: 'Bob' }));
 
     assert.equal(people.get('length'), 1);
     assert.equal(people.get('firstObject.id'), '2');
@@ -32,20 +32,20 @@ describe('Pact | People', function() {
   });
 
   it('fetching a person by ID', async function() {
-    this.given('a person exists', { id: '1', name: 'Alice' });
+    given('a person exists', { id: '1', name: 'Alice' });
 
-    let person = await this.interaction(() => this.store().findRecord('person', '1'));
+    let person = await interaction(() => this.store().findRecord('person', '1'));
 
     assert.equal(person.get('id'), '1');
     assert.equal(person.get('name'), 'Alice');
   });
 
   it('updating a person', async function() {
-    this.given('a person exists', { id: '1', name: 'Alice' });
+    given('a person exists', { id: '1', name: 'Alice' });
 
     let person = await run(() => this.store().findRecord('person', '1'));
 
-    await this.interaction(() => {
+    await interaction(() => {
       person.set('name', 'Alicia');
       return person.save();
     });

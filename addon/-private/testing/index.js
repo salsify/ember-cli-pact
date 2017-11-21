@@ -3,6 +3,7 @@
 import require from 'require';
 import { assert } from '@ember/debug';
 import { getOwner } from '@ember/application';
+import { getContext } from 'ember-test-helpers';
 import { uploadInteraction, finalize } from './upload';
 
 export function setupPact(hooks = {}, options = {}) {
@@ -12,13 +13,18 @@ export function setupPact(hooks = {}, options = {}) {
     hooks = makeMochaHooks();
   }
 
+  // Mocha will have unset the context by the time our `afterEach` runs,
+  // so we stash it in `beforeEach` instead.
+  let context;
+
   hooks.beforeEach(function(assert) {
-    setupServices(this, options);
-    setupProvider(this, options, assert.test.testName);
+    context = getContext();
+    setupServices(context, this, options);
+    setupProvider(context, options, assert.test.testName);
   });
 
   hooks.afterEach(function() {
-    return teardownProvider(this, options);
+    return teardownProvider(context, options);
   });
 }
 
@@ -36,9 +42,9 @@ function makeMochaHooks() {
   };
 }
 
-function setupServices(context, options) {
+function setupServices(context, target, options) {
   for (let service of getConfigValue(context, options, 'serviceInjections')) {
-    context[service] = () => findOwner(context).lookup(`service:${service}`);
+    target[service] = () => findOwner(context).lookup(`service:${service}`);
   }
 }
 
@@ -60,14 +66,9 @@ function findOwner(context) {
 
 function setupProvider(context, options, testName) {
   let MockProvider = loadMockProvider(context, options);
-  let provider = new MockProvider(getConfig(context));
+  let provider = context._pactProvider = new MockProvider(getConfig(context));
 
   assertSingleConsumerName(context, options);
-
-  context.provider = () => provider;
-  context.given = (name, params) => provider.addState(name, params);
-  context.interaction = (perform) => provider.specifyInteraction(context, perform);
-  context.matchingRules = (rules) => provider.specifyMatchingRules(rules);
 
   provider.startInteraction(testName);
 }
@@ -86,7 +87,7 @@ function assertSingleConsumerName(context, options) {
 }
 
 function teardownProvider(context, options) {
-  let provider = context.provider();
+  let provider = context._pactProvider;
   let interaction = provider.serializeInteraction(getConfigValue(context, options, 'pactVersion'));
   let upload = uploadInteraction(interaction, {
     provider: getConfigValue(context, options, 'providerName'),

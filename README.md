@@ -30,7 +30,7 @@ Below is an annotated example of a simple Pact test. Note that, while this examp
 ```js
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupPact } from 'ember-cli-pact';
+import { setupPact, given, interaction } from 'ember-cli-pact';
 
 module('Pact | People', function(hooks) {
   setupTest(hooks);
@@ -45,11 +45,11 @@ module('Pact | People', function(hooks) {
     // Record the state(s) the provider should be in prior to the interaction under test.
     // When verifying the generated pact document against the 'my-api' provider later,
     // its own 'a person exists' state will be invoked with the same parameters.
-    this.given('a person exists', { id: '123', name: 'Alice' });
+    given('a person exists', { id: '123', name: 'Alice' });
 
     // Perform the interaction that this test is intended to record, in this case
     // fetching a particular person record by ID.
-    let person = await this.interaction(() => this.store().findRecord('person', '123'));
+    let person = await interaction(() => this.store().findRecord('person', '123'));
 
     // Verify that the response we received contained the data we expected, and that
     // we interpreted it correctly.
@@ -142,35 +142,39 @@ You can find a few sample Pact tests in this repository: ([QUnit](tests/pact/peo
 
 #### Common Test API
 
-Whether in a QUnit `test()` or a Mocha `it()` block, ember-cli-pact exposes the following methods for setting up and recording an interaction:
+Whether in a QUnit `test()` or a Mocha `it()` block, ember-cli-pact exposes the following functions for setting up and recording an interaction:
 
-##### `this.given(name, params)`
+```js
+import { given, interaction, getProvider, specifyMatchingRules } from 'ember-cli-pact';
+```
+
+##### `given(name, params)`
 
 Calling `given` adds a requirement for the specified provider state to the interaction under test. Provider states represent scenarios that should be set up prior to verifying the interaction, such as creating a particular record or logging in as a user with particular permissions.
 
 See [Provider States](#provider-states) section below for more details.
 
-##### `this.interaction(callback)`
+##### `interaction(callback)`
 
 Calling `interaction` indicates that the wrapped request represents the interaction you're actually testing. This allows you to perform any other actions (e.g. fetching a record that you plan to test updating) without polluting the resulting contract. Every Pact test should contain exactly one interaction.
 
 Note that `interaction` returns the result of its callback so that you can subsequently verify that the response was interpreted as expected.
 
 ```js
-let widgets = await this.interaction(() => this.store().findAll('widget'));
+let widgets = await interaction(() => store().findAll('widget'));
 
 assert.equal(widgets.get('length'), 3);
 assert.deepEqual(widgets.mapBy('name'), ['Foo', 'Bar', 'Baz']);
 ```
 
-##### `this.matchingRules(rules)`
+##### `specifyMatchingRules(rules)`
 
-Some interactions may involve data that's impossible to predict. Calling `matchingRules` specifies a set of rules for the interaction under test dictating what constitutes a successful match when verifying the interaction.
+Some interactions may involve data that's impossible to predict. Calling `specifyMatchingRules` specifies a set of rules for the interaction under test dictating what constitutes a successful match when verifying the interaction.
 
 For instance, to ensure the response body has an `id` field the looks roughly like a UUID:
 
 ```js
-this.matchingRules({
+specifyMatchingRules({
   response: {
     body: {
       id: regex(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
@@ -181,9 +185,9 @@ this.matchingRules({
 
 The [Matching Rules](#matching-rules) section below discusses how and when to use matching rules in more detail.
 
-##### `this.provider()`
+##### `getProvider()`
 
-The `provider` method allows access to the mock provider instance for the current test. See the [Mock Providers](#mock-providers) section below for further details.
+The `getProvider` function allows access to the mock provider instance for the current test. See the [Mock Providers](#mock-providers) section below for further details.
 
 #### QUnit Module Setup
 
@@ -193,7 +197,7 @@ Note that this addon relies on the [simplified QUnit testing API](http://rwjblue
 // tests/pact/people-test.js
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupPact } from 'ember-cli-pact';
+import { setupPact, /* ... */ } from 'ember-cli-pact';
 
 module('Pact | People', function(hooks) {
   setupTest(hooks);
@@ -213,7 +217,7 @@ module('Pact | People', function(hooks) {
 // tests/pact/people-test.js
 import { describe, it } from 'mocha';
 import { setupTest } from 'ember-mocha';
-import { setupPact } from 'ember-cli-pact';
+import { setupPact, /* ... */ } from 'ember-cli-pact';
 
 describe('Pact | People', function() {
   setupTest({ integration: true });
@@ -233,7 +237,7 @@ Provider states are named scenarios that the provider and consumer have an agree
 
 In the "people API" examples above, for instance, we reference an `'a person exists'` provider state that takes `id` and `name` parameters. This provider state allows the consumer to ensure that a person record with the given details exists prior to actually testing the given interaction.
 
-By default, calling `this.given(name, params)` only adds a record of the desired provided state to the interaction under test, but some mock providers may also take calls to `given` into account. For instance, the [Mirage mock provider](#mirage) expects you to register a callback that will be executed when a given provider state is added, allowing you to make the corresponding change to your Mirage server state, e.g. `server.create('person', params)`.
+By default, calling `given(name, params)` only adds a record of the desired provided state to the interaction under test, but some mock providers may also take calls to `given` into account. For instance, the [Mirage mock provider](#mirage) expects you to register a callback that will be executed when a given provider state is added, allowing you to make the corresponding change to your Mirage server state, e.g. `server.create('person', params)`.
 
 *Note*: version 2 of the Pact Specification only allows for a single provider state per interaction, and it doesn't support supplying parameters to that state. Given this, if you're working with a provider that verifies using Pact v2, you may need to have a larger set of provider states that encode specific hard coded information in their description.
 
@@ -241,14 +245,14 @@ By default, calling `this.given(name, params)` only adds a record of the desired
 
 Some interactions may involve data that's impossible to make static, like a generated ID for a newly-created record or a timestamp. For cases like these, replaying the same interaction may validly produce a slightly different result every time.
 
-To account for this, Pact allows for defining a set of matching rules for various elements of an interaction. You can call `this.matchingRules(...)` in any Pact test to add matching rules to the current interaction, and the [Mirage mock provider](#mirage) also allows you to generate matching rules for parts of the response body that correspond to model attributes.
+To account for this, Pact allows for defining a set of matching rules for various elements of an interaction. You can import and call `specifyMatchingRules(...)` in any Pact test to add matching rules to the current interaction, and the [Mirage mock provider](#mirage) also allows you to generate matching rules for parts of the response body that correspond to model attributes.
 
 #### Matchable Interaction Elements
 
 A fully-specified set of matching rules for an interaction might look something like this:
 
 ```js
-this.matchingRules({
+specifyMatchingRules({
   request: {
     path: /* matcher for the request path */,
     query: {
@@ -326,7 +330,7 @@ Before the details of an interaction are uploaded to the test server to be writt
 The provided callback will receive a JSON representation of the interaction that you can tweak however you like. For instance, if you wish to exclude a certain request header from being recorded for a test, you could write:
 
 ```js
-this.provider().beforeUpload((interaction) => {
+getProvider().beforeUpload((interaction) => {
   delete interaction.request.headers['X-Dont-Save-Me'];
 });
 ```
@@ -376,11 +380,15 @@ The Pretender mock provider is fairly lightweight; it starts and stops [a Preten
 To add handlers to the provider, call `map()` on it:
 
 ```js
-this.provider().map((server) => {
+import { getProvider, interaction } from 'ember-cli-pact';
+
+// ...
+
+getProvider().map((server) => {
   server.get('/test-route', () => [200, {}, 'ok']);
 });
 
-let response = await this.interaction(() => $.get('/test-route'));
+let response = await interaction(() => $.get('/test-route'));
 
 assert.equal(response, 'ok');
 ```
@@ -413,7 +421,7 @@ export default class ApplicationSerializer extends PactEnabled(MyBaseSerializer)
 
 The Mirage mock provider requires that all provider states be declared using the `providerState` helper. Provider state definitions will be loaded from all modules `tests/helpers/pact-provider-states`, so within that directory you can organize them however you see fit.
 
-When you activate a provider state with `this.given()`, the configured callback for that state will be invoked with the running Mirage server in order for the server to be set up in that state.
+When you activate a provider state with `given()`, the configured callback for that state will be invoked with the running Mirage server in order for the server to be set up in that state.
 
 For instance, the `'a person exists'` provider state described above could be declared like this:
 
