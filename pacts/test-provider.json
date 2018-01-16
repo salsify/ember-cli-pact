@@ -57,6 +57,55 @@
       }
     },
     {
+      "description": "listing beds",
+      "providerStates": [
+        {
+          "name": "a bed exists",
+          "params": {
+            "id": "1",
+            "size": "double"
+          }
+        },
+        {
+          "name": "a bed exists",
+          "params": {
+            "id": "2",
+            "size": "queen"
+          }
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "method": "GET",
+        "path": "/beds"
+      },
+      "response": {
+        "body": {
+          "beds": [
+            {
+              "id": "1",
+              "size": "double"
+            },
+            {
+              "id": "2",
+              "size": "queen"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+          }
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "listing people",
       "providerStates": [
         {
