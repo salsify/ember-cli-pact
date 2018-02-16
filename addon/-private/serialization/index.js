@@ -1,2 +1,3 @@
-export { default as serializeMatchingRules } from './matching-rules';
-export { default as v3 } from './v3';
+export { default as serializeMatchingRules } from './utils';
+export { default as serializeV2 } from './v2';
+export { default as serializeV3 } from './v3';

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { serializeMatchingRules } from 'ember-cli-pact/-private/serialization';
+import { serializeMatchingRules } from 'ember-cli-pact/-private/serialization/utils';
 import { type, equality, regex, integer, decimal, allOf, anyOf, arrayElements, hashValues } from 'ember-cli-pact/matchers';
 
 module('Unit | matching-rules', function() {
@@ -154,7 +154,7 @@ module('Unit | matching-rules', function() {
   test('allOf()', function(assert) {
     let rule = allOf([type(), regex(/a/)]);
 
-    assert.throws(() => serializeMatchingRules(2, rule), /allOf matcher is unavailable in pact v2/i);
+    assert.throws(() => serializeMatchingRules(1, rule), /allOf matcher is unavailable in pact v1/i);
 
     assert.deepEqual(serializeMatchingRules(3, rule), {
       '$': {
@@ -169,7 +169,7 @@ module('Unit | matching-rules', function() {
   test('anyOf()', function(assert) {
     let rule = anyOf([integer(), decimal()]);
 
-    assert.throws(() => serializeMatchingRules(2, rule), /anyOf matcher is unavailable in pact v2/i);
+    assert.throws(() => serializeMatchingRules(1, rule), /anyOf matcher is unavailable in pact v1/i);
 
     assert.deepEqual(serializeMatchingRules(3, rule), {
       '$': {

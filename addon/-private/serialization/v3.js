@@ -1,12 +1,11 @@
 import { assert } from '@ember/debug';
-import serializeMatchingRules from './matching-rules';
+import { createPactSkeleton, applyBody, serializeMatchingRules, applyMatchingRules } from './utils';
 
 const VERSION = 3;
 
 export default function serializeV3(interaction) {
-  let pact = createPact(interaction);
-
-  extractPathAndQuery(pact, interaction.captured.url);
+  let pact = createPactSkeleton(interaction);
+  pact.providerStates = interaction.providerStates;
 
   applyBody(pact.request, interaction.captured.requestBody);
   applyBody(pact.response, interaction.captured.responseText);
@@ -22,57 +21,6 @@ export default function serializeV3(interaction) {
   applyMatchingRules(pact.response, responseRules);
 
   return pact;
-}
-
-function createPact(interaction) {
-  return {
-    description: interaction.description,
-    providerStates: interaction.providerStates,
-    request: {
-      method: interaction.captured.method,
-      headers: interaction.captured.requestHeaders
-    },
-    response: {
-      status: interaction.captured.status,
-      headers: interaction.captured.responseHeaders
-    }
-  };
-}
-
-function applyBody(target, body) {
-  if (body) {
-    target.body = JSON.parse(body);
-  }
-}
-
-function applyMatchingRules(target, rules) {
-  if (Object.keys(rules).length) {
-    target.matchingRules = rules;
-  }
-}
-
-function extractPathAndQuery(pact, url) {
-  let questionIndex = url.indexOf('?');
-  if (questionIndex !== -1) {
-    pact.request.query = parseQuery(url.substring(questionIndex + 1));
-    url = url.substring(0, questionIndex);
-  }
-  pact.request.path = url;
-}
-
-function parseQuery(query) {
-  let parsed = {};
-  for (let item of query.split('&')) {
-    let pair = item.split('=');
-    let key = decodeURIComponent(pair[0]);
-    let value = decodeURIComponent(pair[1]);
-    if (parsed[key]) {
-      parsed[key].push(value);
-    } else {
-      parsed[key] = [value];
-    }
-  }
-  return parsed;
 }
 
 function serializeRequestRules(source, target) {

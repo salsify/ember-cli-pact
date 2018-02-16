@@ -25,11 +25,11 @@ export function decimal() {
 }
 
 export function allOf(matchers) {
-  return new MultiMatcher('allOf', 3, undefined /* implicitly AND */, matchers);
+  return new MultiMatcher('allOf', 2, undefined /* implicitly AND */, matchers);
 }
 
 export function anyOf(matchers) {
-  return new MultiMatcher('anyOf', 3, 'OR', matchers);
+  return new MultiMatcher('anyOf', 2, 'OR', matchers);
 }
 
 export function arrayElements(object) {

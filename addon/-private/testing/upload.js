@@ -10,9 +10,11 @@ export /* istanbul ignore next */ function finalize() {
 
 export function uploadInteraction(interaction, options) {
   assert('You must configure a provider name', options.provider);
+  assert('You must configure a Pact version', options.version);
 
   return post('upload', {
     session: SESSION_ID,
+    version: options.version,
     provider: options.provider,
     consumer: options.consumer,
     interaction
