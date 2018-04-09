@@ -313,7 +313,7 @@ Pact provides several possible matchers to determine exactly how tested request/
 
 Pact tests can be run in one of two modes: `write` or `verify`.
 
-When running in `write` mode, all preexisting contracts will be removed and the results of the test run will be written in their place. This is the default when running in development.
+When running in `write` mode, all preexisting contracts will be removed and the results of the test run will be written in their place. This is the default when running tests locally.
 
 When running in `verify` mode, no new contracts will be written. Instead, the test server will verify that all generated contracts match the previously written ones on disk, failing the test suite otherwise. This is the default when running in CI (e.g. Travis or Circle).
 
