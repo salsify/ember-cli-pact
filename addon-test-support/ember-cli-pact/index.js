@@ -1,4 +1,3 @@
-// import { getContext } from '@ember/test-helpers'; TODO: Newer test-helpers
 import { getContext } from 'ember-test-helpers';
 
 export { setupPact } from './-private/testing';
