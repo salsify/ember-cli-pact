@@ -16,7 +16,7 @@ module.exports = {
         pactsDirectory: 'pacts',
         mode: process.env.PACT_MODE || (process.env.CI ? 'verify' : 'write'),
         pactVersion: 3,
-        enabled: env !== 'production'
+        enabled: env === 'test'
       }
     };
   },
@@ -26,10 +26,14 @@ module.exports = {
     return this._isEnabled() || addon.name === 'ember-cli-babel';
   },
 
-  treeFor() {
-    if (this._isEnabled()) {
-      return this._super.treeFor.apply(this, arguments);
-    }
+  treeForAddonTestSupport(tree) {
+    // intentionally not calling _super here
+    // so that can have our `import`'s be
+    // import { ... } from 'ember-cli-pact';
+
+    return this.preprocessJs(tree, '/', this.name, {
+      registry: this.registry,
+    });
   },
 
   testemMiddleware(app) {
