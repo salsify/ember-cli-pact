@@ -5,6 +5,7 @@ import { setupPact, given, getProvider, interaction } from 'ember-cli-pact';
 module('Pact | Departments', function(hooks) {
   setupTest(hooks);
   setupPact(hooks, {
+    mockProvider: 'custom',
     providerName: 'departments-server'
   });
 

@@ -27,9 +27,32 @@ module.exports = {
   },
 
   treeFor() {
+    // Most of the addon is in addon-test-support and only included
+    // in the test environment; however, a few elements are potentially
+    // used with Mirage, which is enabled in the development environment
+    // by default and _may_ also be enabled in production (in which case
+    // the enabled config can be set to true explicitly)
     if (this._isEnabled()) {
       return this._super.treeFor.apply(this, arguments);
     }
+  },
+
+  treeForAddonTestSupport(tree) {
+    // intentionally not calling _super here
+    // so that can have our `import`'s be
+    // import { ... } from 'ember-cli-pact';
+
+    const Funnel = require('broccoli-funnel');
+
+    let namespacedTree = new Funnel(tree, {
+      srcDir: '/',
+      destDir: `/${this.moduleName()}`,
+      annotation: `Addon#treeForTestSupport (${this.name})`,
+    });
+
+    return this.preprocessJs(namespacedTree, '/', this.name, {
+      registry: this.registry,
+    });
   },
 
   testemMiddleware(app) {
