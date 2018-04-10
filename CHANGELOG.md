@@ -1,4 +1,4 @@
-## Unreleased
+## 1.0.0-alpha.3 (April 10, 2018)
 ### Fixed
 - We no longer play games with `shouldIncludeChildAddon`, as that caused issues by caching project config before all addons had been initialized.
 
