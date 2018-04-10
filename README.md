@@ -55,7 +55,7 @@ module('Pact | People', function(hooks) {
     // we interpreted it correctly.
     assert.equal(person.get('id'), '123');
     assert.equal(person.get('name'), 'Alice');
-  });  
+  });
 });
 ```
 
@@ -202,7 +202,7 @@ import { setupPact, /* ... */ } from 'ember-cli-pact';
 module('Pact | People', function(hooks) {
   setupTest(hooks);
   setupPact(hooks, {
-    // optional module-specific configuration here  
+    // optional module-specific configuration here
   });
 
   test('...', function(assert) {
@@ -367,7 +367,7 @@ The primary means of configuring ember-cli-pact is by defining an `ember-cli-pac
  - `serviceInjections`: an array of service names that should be made available as a method of the same name in your Pact tests; defaults to `['store']`
  - `pactsDirectory`: the location relative to the project root where contract files should be written; defaults to `'pacts'`
  - `mode`: the [write/verify mode](#write-vs-verify) ember-cli-pact should operate in; defaults to the value of the `PACT_MODE` environment variable if present, others `'write'` in development and `'verify'` in CI environments like Travis or Circle
- - `pactVersion`: the version of the Pact specification that should be used; defaults to `3` (which is currently the only supported value)
+ - `pactVersion`: the version of the Pact specification that should be used; defaults to `3` (the only other currently supported value is `2`)
 
 ## Mock Providers
 
