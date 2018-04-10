@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-pact",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Contract testing with Ember.js and Pact",
   "keywords": [
     "ember-addon"
