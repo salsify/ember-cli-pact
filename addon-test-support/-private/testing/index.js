@@ -76,12 +76,12 @@ function setupProvider(context, options, testName) {
 function loadMockProvider(context, options) {
   let name = getConfigValue(context, options, 'mockProvider');
   try {
-    // Look in the default provider location (from addon-test-support)
-    return require(`ember-cli-pact/pact-providers/${name}`).default;
-  } catch (error) {
-    // Fall back to looking for a custom provider in the helpers directory
+    // Start by looking for a custom provider in the helpers directory
     let { modulePrefix } = getConfig(context);
     return require(`${modulePrefix}/tests/helpers/pact-providers/${name}`).default;
+  } catch (error) {
+    // Fall back to the default provider location from addon-test-support
+    return require(`ember-cli-pact/pact-providers/${name}`).default;
   }
 }
 
