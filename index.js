@@ -21,11 +21,6 @@ module.exports = {
     };
   },
 
-  shouldIncludeChildAddon(addon) {
-    // Always include Babel so ember-cli doesn't complain
-    return this._isEnabled() || addon.name === 'ember-cli-babel';
-  },
-
   treeFor() {
     // Most of the addon is in addon-test-support and only included
     // in the test environment; however, a few elements are potentially

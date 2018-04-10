@@ -1,3 +1,7 @@
+## Unreleased
+### Fixed
+- We no longer play games with `shouldIncludeChildAddon`, as that caused issues by caching project config before all addons had been initialized.
+
 ## 1.0.0-alpha.2 (April 10, 2018)
 ### Added
 - ember-cli-pact can now produce Pact Specification v2 pact files according to the `version` config option
