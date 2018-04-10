@@ -1,5 +1,5 @@
 import { assert } from '@ember/debug';
-import { v3 as serializeV3 } from 'ember-cli-pact/-private/serialization';
+import { serializeV3, serializeV2 } from 'ember-cli-pact/-private/serialization';
 
 export default class Interaction {
   constructor(description) {
@@ -23,7 +23,12 @@ export default class Interaction {
   }
 
   serialize(version) {
-    assert('Only v3 of the Pact Specification is currently supported', `${version}` === '3');
-    return serializeV3(this);
+    if (`${version}` === '3') {
+      return serializeV3(this);
+    } else if (`${version}` === '2') {
+      return serializeV2(this);
+    } else {
+      throw new Error(`Unsupported serialization version: ${version}`);
+    }
   }
 }

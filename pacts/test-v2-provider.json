@@ -1,0 +1,54 @@
+{
+  "consumer": {
+    "name": "test-consumer"
+  },
+  "interactions": [
+    {
+      "description": "fetching a person by ID",
+      "providerState": "a person exists",
+      "request": {
+        "headers": {
+          "Accept": "application/vnd.api+json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        "method": "GET",
+        "path": "/people/1"
+      },
+      "response": {
+        "body": {
+          "data": {
+            "attributes": {
+              "created-at": "1969-07-20T20:18:04.000Z",
+              "name": "Person"
+            },
+            "id": "1",
+            "relationships": {
+              "department": {
+                "data": null
+              }
+            },
+            "type": "people"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.data.created-at": {
+            "match": "regex",
+            "regex": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-specification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "test-v2-provider"
+  }
+}

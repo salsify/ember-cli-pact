@@ -96,6 +96,7 @@ function teardownProvider(context, options) {
   let provider = context._pactProvider;
   let interaction = provider.serializeInteraction(getConfigValue(context, options, 'pactVersion'));
   let upload = uploadInteraction(interaction, {
+    version: getConfigValue(context, options, 'pactVersion'),
     provider: getConfigValue(context, options, 'providerName'),
     consumer: getConfigValue(context, options, 'consumerName')
   });
