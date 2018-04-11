@@ -1,4 +1,4 @@
-# ember-cli-pact [![Build Status](https://travis-ci.org/salsify/ember-cli-pact.svg?branch=master)](https://travis-ci.org/salsify/ember-cli-pact) [![Coverage Status](https://coveralls.io/repos/github/salsify/ember-cli-pact/badge.svg)](https://coveralls.io/github/salsify/ember-cli-pact)
+# ember-cli-pact [![Build Status](https://travis-ci.org/salsify/ember-cli-pact.svg?branch=master)](https://travis-ci.org/salsify/ember-cli-pact)
 
 - [Overview](#overview)
   - [What Does a Pact Test Look Like?](#what-does-a-pact-test-look-like)
