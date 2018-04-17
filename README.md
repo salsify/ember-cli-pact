@@ -436,6 +436,25 @@ providerState('a person exists', (server, { id, name }) => {
 
 Then, when a test adds a requirement for the `'a person exists'` provider state, the Mirage server will automatically be ready to serve the corresponding person record.
 
+If you ever need to simulate a request failure (such as `500` status code request), you could do something like:
+
+```js
+import { Response } from 'ember-cli-mirage';
+import { getProvider, providerState } from 'ember-cli-pact';
+
+providerState('api returns an error', (server, { statusCode, headers, errors }) => {
+  // this could also get `server.get`
+  server.post('/url/that/would/fail', (schema, request) => {
+    // because we do not create a new Mirage model, we will
+    // avoid `serialize` hook altogether.
+    // calling `recordRequest` manually to make sure
+    // the interaction is captured
+    getProvider().recordRequest(request);
+    return new Response(statusCode, headers, { errors });
+  });
+});
+```
+
 #### Model Attribute Matching Rules
 
 Mirage models can expose matching rules for attributes of those models wherever they appear in a response payload by defining a static `matchingRules` property on the model class.
