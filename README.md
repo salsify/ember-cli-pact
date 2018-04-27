@@ -323,6 +323,54 @@ The Pact mode can be overwritten via [a configuration option](#configuration) or
 PACT_MODE=verify ember test
 ```
 
+### Publishing Pacts
+
+If you found yourself in a situation when you have a lot of pacts for your
+provider to verify, you would want to make suer the provider has access to the
+latest version of the Pacts at all times.
+
+This is where the [pact broker](https://github.com/pact-foundation/pact_broker)
+comes in. It allows you to share your pacts between projects, and make them
+useful for people too.
+
+Assuming, you set up a pact broker as a part of your infrastructure, you could
+use the following built-in command to automatically upload generated pacts to
+the pact broker:
+
+```sh
+ember pact:publish
+```
+
+There are several ways to configure upload process:
+
++ via command line options:
+  + `--path` (required; custom path to pact files, defaults to
+    `project-root/pacts`)
+  + `--broker` (required; custom broker URL)
+  + `--consumer-version` (required; the version of your application,
+    defaults to the version in `package.json`)
+  + `--broker-username` (username to access pact broker)
+  + `--broker-password` (password to access pact broker)
+  + `--tags` (a comma-separated string with tags for pacts)
++ via `.env` file
+  + `EMBER_CLI_PACT_PATH` (custom path to pact files)
+  + `EMBER_CLI_PACT_BROKER` (custom broker URL)
+  + `EMBER_CLI_PACT_CONSUMER_VERSION` (the version of your application)
+  + `EMBER_CLI_PACT_BROKER_USERNAME` (username to access pact broker)
+  + `EMBER_CLI_PACT_BROKER_PASSWORD` (password to access pact broker)
+  + `EMBER_CLI_PACT_TAGS` (a comma-separated string with tags for pacts)
++ via `proccess.env`
+  + `process.env.EMBER_CLI_PACT_PATH` (custom path to pact files)
+  + `process.env.EMBER_CLI_PACT_BROKER` (custom broker URL)
+  + `process.env.EMBER_CLI_PACT_CONSUMER_VERSION` (the version of your application)
+  + `process.env.EMBER_CLI_PACT_BROKER_USERNAME` (username to access pact broker)
+  + `process.env.EMBER_CLI_PACT_BROKER_PASSWORD` (password to access pact broker)
+  + `process.env.EMBER_CLI_PACT_TAGS` (a comma-separated string with tags for pacts)
+
+`ember-cli-pact` uses [dotenv](https://github.com/motdotla/dotenv) for
+convinience so you don't have to pass environment flags every time and could
+just use `.env` file for that.
+
 ### Customizing Recorded Interactions
 
 Before the details of an interaction are uploaded to the test server to be written or verified, you may wish to tweak the payload. The [mock provider](#mock-providers) provides a `beforeUpload` hook that you can use to accomplish this.

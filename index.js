@@ -1,10 +1,15 @@
 /* eslint-env node, es6 */
 'use strict';
 
+const commands = require('./lib/commands');
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = {
   name: 'ember-cli-pact',
+
+  includedCommands() {
+    return commands;
+  },
 
   config(env) {
     return {
