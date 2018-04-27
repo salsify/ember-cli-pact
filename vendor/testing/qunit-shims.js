@@ -1,18 +1,9 @@
 /* global define */
 
-define('ember-cli-qunit', [], function() {
-  return {
-    __esModule: true,
-    start: function() {}
-  };
-});
-
 define('ember-qunit', [], function() {
   return {
     __esModule: true,
-    setResolver: function() {},
-    moduleFor: function() {},
-    test: function() {},
+    start: function() {}
   };
 });
 

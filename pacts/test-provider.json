@@ -182,20 +182,6 @@
                 "name": "People"
               },
               "id": "1",
-              "relationships": {
-                "members": {
-                  "data": [
-                    {
-                      "id": "1",
-                      "type": "people"
-                    },
-                    {
-                      "id": "2",
-                      "type": "people"
-                    }
-                  ]
-                }
-              },
               "type": "departments"
             }
           ]

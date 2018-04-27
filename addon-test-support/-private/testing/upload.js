@@ -4,7 +4,7 @@ import { assert } from '@ember/debug';
 
 const SESSION_ID = uuid();
 
-export /* istanbul ignore next */ function finalize() {
+export function finalize() {
   return post('finalize', { session: SESSION_ID });
 }
 
@@ -42,4 +42,4 @@ function post(path, body) {
 }
 
 // Use native fetch if available, or fallback to e.g. ember-fetch as a polyfill
-const fetch = self.fetch || /* istanbul ignore next */ require('fetch').default;
+const fetch = self.fetch || require('fetch').default;

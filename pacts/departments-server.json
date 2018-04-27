@@ -36,12 +36,6 @@
                 "name": "People"
               },
               "id": "1",
-              "relationships": {
-                "members": {
-                  "data": [
-                  ]
-                }
-              },
               "type": "departments"
             },
             {
@@ -49,12 +43,6 @@
                 "name": "Admin"
               },
               "id": "2",
-              "relationships": {
-                "members": {
-                  "data": [
-                  ]
-                }
-              },
               "type": "departments"
             }
           ]

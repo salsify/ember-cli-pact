@@ -19,6 +19,6 @@ define('mocha', [], function() {
 define('ember-mocha', [], function() {
   return {
     __esModule: true,
-    setResolver: function() {}
+    setupTest: function() {}
   };
 });

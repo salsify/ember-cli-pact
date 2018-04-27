@@ -113,7 +113,6 @@ function registerFinalizeCallback() {
   if (!addedFinalizeCallback) {
     addedFinalizeCallback = true;
 
-    // istanbul ignore next: runs after coverage has been reported
     Testem.afterTests((config, data, callback) => {
       finalize()
         .catch((error) => setTimeout(() => { throw error; }))

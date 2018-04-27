@@ -1,7 +1,8 @@
-/* eslint-env node, es6 */
 'use strict';
 
 const commands = require('./lib/commands');
+
+// eslint-disable-next-line node/no-unpublished-require
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = {

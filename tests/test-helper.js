@@ -1,9 +1,8 @@
-import resolver from './helpers/resolver';
-import { setResolver as setMochaResolver } from 'ember-mocha';
-import { setResolver as setQunitResolver } from 'ember-qunit';
-import { start } from 'ember-cli-qunit';
+import Application from '../app';
+import config from '../config/environment';
+import { setApplication } from '@ember/test-helpers';
+import { start } from 'ember-qunit';
 
-setMochaResolver(resolver);
-setQunitResolver(resolver);
+setApplication(Application.create(config.APP));
 
 start();
