@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect;
 const publishCommand = require('../../lib/commands/publish');
 const helpers = require('../helpers/command');

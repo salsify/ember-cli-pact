@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * Creates a fake project object for unit tests.
  *

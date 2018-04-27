@@ -3,6 +3,10 @@ module.exports = {
   useYarn: true,
   scenarios: [
     {
+      name: 'node',
+      command: 'yarn test-node'
+    },
+    {
       name: 'ember-lts-2.8',
       bower: {
         dependencies: {
