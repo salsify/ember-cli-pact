@@ -1,3 +1,7 @@
+## 1.0.0-alpha.4 (April 27, 2018)
+### Added
+- ember-cli-pact now exposes an `ember pact:publish` command for uploading contracts to a Pact broker
+
 ## 1.0.0-alpha.3 (April 10, 2018)
 ### Fixed
 - We no longer play games with `shouldIncludeChildAddon`, as that caused issues by caching project config before all addons had been initialized.
