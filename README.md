@@ -136,7 +136,7 @@ Depending on your choice of [mock provider](#mock-providers), you'll likely also
 
 ### Writing Pact Tests
 
-All the contracts your consumer (i.e. Ember app) produces will be driven a set of Pact tests whose sole person is to perform and verify interactions with a mock provider. These tests will typically live within a `tests/pact` directory that is a peer to your other high-level test types (`unit`, `acceptance`, etc.).
+All the contracts your consumer (i.e. Ember app) produces will be driven a set of Pact tests whose sole purpose is to perform and verify interactions with a mock provider. These tests will typically live within a `tests/pact` directory that is a peer to your other high-level test types (`unit`, `acceptance`, etc.).
 
 You can find a few sample Pact tests in this repository: ([QUnit](tests/pact/people-qunit-test.js) | [Mocha](tests/pact/people-mocha-test.js))
 
@@ -326,7 +326,7 @@ PACT_MODE=verify ember test
 ### Publishing Pacts
 
 If you found yourself in a situation when you have a lot of pacts for your
-provider to verify, you would want to make suer the provider has access to the
+provider to verify, you would want to make sure the provider has access to the
 latest version of the Pacts at all times.
 
 This is where the [pact broker](https://github.com/pact-foundation/pact_broker)
