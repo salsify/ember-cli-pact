@@ -1,5 +1,6 @@
 import require from 'require';
 import { assert } from '@ember/debug';
+import { camelize } from '@ember/string'
 import MockProvider from 'ember-cli-pact/mock-provider';
 import { allOf, arrayElements } from 'ember-cli-pact/matchers';
 
@@ -98,7 +99,7 @@ export function PactEnabled(SerializerClass) {
     }
 
     getMatchingRulesForResource(resource) {
-      let { matchingRules } = this.schema.modelFor(resource.modelName).class;
+      let { matchingRules } = this.schema.modelFor(camelize(resource.modelName)).class;
       if (matchingRules) {
         let normalized = {};
         for (let key of (Object.keys(matchingRules))) {
