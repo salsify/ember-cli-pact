@@ -16,25 +16,35 @@ module.exports = function() {
           command: 'yarn test-node'
         },
         {
-          name: 'ember-lts-2.12',
+          name: 'mocha',
           npm: {
             devDependencies: {
-              'ember-source': '~2.12.0'
+              'ember-cli-mocha': 'latest',
+              'ember-cli-chai': 'latest',
+              'ember-cli-qunit': null
             }
           }
         },
         {
           name: 'ember-lts-2.16',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({ 'jquery-integration': true }),
+          },
           npm: {
             devDependencies: {
+              '@ember/jquery': '^0.5.1',
               'ember-source': '~2.16.0'
             }
           }
         },
         {
           name: 'ember-lts-2.18',
+          env: {
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({ 'jquery-integration': true }),
+          },
           npm: {
             devDependencies: {
+              '@ember/jquery': '^0.5.1',
               'ember-source': '~2.18.0'
             }
           }
@@ -67,16 +77,6 @@ module.exports = function() {
           name: 'ember-default',
           npm: {
             devDependencies: {}
-          }
-        },
-        {
-          name: 'mocha',
-          npm: {
-            devDependencies: {
-              'ember-cli-mocha': 'latest',
-              'ember-cli-chai': 'latest',
-              'ember-cli-qunit': null
-            }
           }
         }
       ]

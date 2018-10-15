@@ -3,7 +3,7 @@ import { setupTest } from 'ember-mocha';
 import { setupPact, given, interaction, getProvider, specifyMatchingRules } from 'ember-cli-pact';
 import { assert } from 'chai';
 import { regex } from 'ember-cli-pact/matchers';
-import $ from 'jquery';
+import ajax from '../helpers/ajax';
 
 describe('Pact | Imports', function() {
   setupTest({ integration: true });
@@ -31,7 +31,7 @@ describe('Pact | Imports', function() {
       }
     });
 
-    let response = await interaction(() => $.ajax('/imports/current/stop', { method: 'PUT' }));
+    let response = await interaction(() => ajax('/imports/current/stop', { method: 'PUT' }));
 
     assert.deepEqual(response, {
       status: 'stopped',
