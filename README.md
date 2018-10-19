@@ -107,7 +107,7 @@ After running this test, a file `my-api.json` capturing the interaction would be
     }
   ],
   "metadata": {
-    "pact-specification": {
+    "pactSpecification": {
       "version": "3.0.0"
     }
   }
