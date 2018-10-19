@@ -1,3 +1,8 @@
+## 1.0.0-alpha.5 (October 19, 2018)
+### Fixed
+- Pact files are now generated with a `pactSpecification` key rather than the non-standard `pact-specification`
+- Mirage model names are now properly camelized before lookup
+
 ## 1.0.0-alpha.4 (April 27, 2018)
 ### Added
 - ember-cli-pact now exposes an `ember pact:publish` command for uploading contracts to a Pact broker
