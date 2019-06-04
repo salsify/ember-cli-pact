@@ -17,6 +17,7 @@
       "request": {
         "headers": {
           "Accept": "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
         "method": "GET",
@@ -77,6 +78,7 @@
       "request": {
         "headers": {
           "Accept": "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
         "method": "GET",
@@ -135,6 +137,7 @@
       "request": {
         "headers": {
           "Accept": "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
         "method": "GET",
@@ -225,6 +228,7 @@
       "request": {
         "headers": {
           "Accept": "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
           "X-Requested-With": "XMLHttpRequest"
         },
         "method": "GET",

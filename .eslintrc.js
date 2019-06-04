@@ -1,9 +1,10 @@
 module.exports = {
-  globals: {
-    server: true,
-  },
   root: true,
   parser: 'babel-eslint',
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module'
+  },
   plugins: [
     'ember'
   ],
@@ -12,8 +13,6 @@ module.exports = {
     'plugin:ember/recommended'
   ],
   env: {
-    node: true,
-    mocha: true,
     browser: true
   },
   rules: {
@@ -22,6 +21,7 @@ module.exports = {
     // node files
     {
       files: [
+        '.eslintrc.js',
         '.template-lintrc.js',
         'ember-cli-build.js',
         'index.js',
@@ -29,7 +29,6 @@ module.exports = {
         'blueprints/*/index.js',
         'config/**/*.js',
         'tests/dummy/config/**/*.js',
-        'lib/**/*.js',
         'node-tests/**/*.js'
       ],
       excludedFiles: [
@@ -51,12 +50,12 @@ module.exports = {
         // add your custom rules and overrides for node files here
       })
     },
-
-    // node tests
+    // node test files
     {
-      files: [
-        'node-tests/**/*.js'
-      ],
+      files: ['node-tests/**/*.js'],
+      env: {
+        mocha: true
+      },
       rules: {
         'node/no-unpublished-require': 'off'
       }
