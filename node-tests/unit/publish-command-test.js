@@ -13,6 +13,7 @@ describe('Publish Command', function() {
     consumerVersion: '',
     brokerUsername: '',
     brokerPassword: '',
+    brokerToken: '',
     tags: ''
   };
 
@@ -22,6 +23,7 @@ describe('Publish Command', function() {
     delete process.env.EMBER_CLI_PACT_BROKER;
     delete process.env.EMBER_CLI_PACT_BROKER_USERNAME;
     delete process.env.EMBER_CLI_PACT_BROKER_PASSWORD;
+    delete process.env.EMBER_CLI_PACT_BROKER_TOKEN;
     delete process.env.EMBER_CLI_PACT_TAGS;
   });
 
@@ -43,6 +45,7 @@ describe('Publish Command', function() {
       version: '2.2.3',
       brokerUsername: '',
       brokerPassword: '',
+      brokerToken: '',
       tags: 'release'
     });
 
@@ -52,6 +55,7 @@ describe('Publish Command', function() {
       pactBroker: 'http://localhost:1235/',
       pactBrokerUsername: '',
       pactBrokerPassword: '',
+      pactBrokerToken: '',
       tags: ['release']
     });
   });
@@ -67,6 +71,7 @@ describe('Publish Command', function() {
       pactBroker: 'http://localhost:1235/',
       pactBrokerUsername: '',
       pactBrokerPassword: '',
+      pactBrokerToken: '',
       tags: []
     });
   });
@@ -82,6 +87,7 @@ describe('Publish Command', function() {
       pactBroker: 'http://localhost:1235/',
       pactBrokerUsername: '',
       pactBrokerPassword: '',
+      pactBrokerToken: '',
       tags: []
     });
   });

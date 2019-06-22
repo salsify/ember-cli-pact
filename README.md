@@ -351,6 +351,7 @@ There are several ways to configure upload process:
     defaults to the version in `package.json`)
   + `--broker-username` (username to access pact broker)
   + `--broker-password` (password to access pact broker)
+  + `--broker-token` (token to access pact broker)
   + `--tags` (a comma-separated string with tags for pacts)
 + via `.env` file
   + `EMBER_CLI_PACT_PATH` (custom path to pact files)
@@ -358,6 +359,7 @@ There are several ways to configure upload process:
   + `EMBER_CLI_PACT_CONSUMER_VERSION` (the version of your application)
   + `EMBER_CLI_PACT_BROKER_USERNAME` (username to access pact broker)
   + `EMBER_CLI_PACT_BROKER_PASSWORD` (password to access pact broker)
+  + `EMBER_CLI_PACT_BROKER_TOKEN` (token to access pact broker)
   + `EMBER_CLI_PACT_TAGS` (a comma-separated string with tags for pacts)
 + via `proccess.env`
   + `process.env.EMBER_CLI_PACT_PATH` (custom path to pact files)
@@ -365,6 +367,7 @@ There are several ways to configure upload process:
   + `process.env.EMBER_CLI_PACT_CONSUMER_VERSION` (the version of your application)
   + `process.env.EMBER_CLI_PACT_BROKER_USERNAME` (username to access pact broker)
   + `process.env.EMBER_CLI_PACT_BROKER_PASSWORD` (password to access pact broker)
+  + `process.env.EMBER_CLI_PACT_BROKER_TOKEN` (token to access pact broker)
   + `process.env.EMBER_CLI_PACT_TAGS` (a comma-separated string with tags for pacts)
 
 `ember-cli-pact` uses [dotenv](https://github.com/motdotla/dotenv) for
