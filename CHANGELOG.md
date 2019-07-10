@@ -1,3 +1,7 @@
+## 1.0.0-alpha.6 (July 10, 2019)
+### Added
+- `ember pact:publish` now supports publishing using token-based authentication
+
 ## 1.0.0-alpha.5 (October 19, 2018)
 ### Fixed
 - Pact files are now generated with a `pactSpecification` key rather than the non-standard `pact-specification`
