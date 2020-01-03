@@ -23,7 +23,7 @@ export default class MirageProvider extends MockProvider {
 
     let state = this.lookupProviderState(name);
     assert('Mirage provider states require a callback function', typeof state.config === 'function');
-    state.config.call(null, this.server, params);
+    return state.config.call(null, this.server, params);
   }
 
   endInteraction() {

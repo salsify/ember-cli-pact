@@ -45,7 +45,7 @@ module('Pact | People', function(hooks) {
     // Record the state(s) the provider should be in prior to the interaction under test.
     // When verifying the generated pact document against the 'my-api' provider later,
     // its own 'a person exists' state will be invoked with the same parameters.
-    given('a person exists', { id: '123', name: 'Alice' });
+    const person = given('a person exists', { id: '123', name: 'Alice' });
 
     // Perform the interaction that this test is intended to record, in this case
     // fetching a particular person record by ID.
@@ -481,7 +481,7 @@ For instance, the `'a person exists'` provider state described above could be de
 import { providerState } from 'ember-cli-pact';
 
 providerState('a person exists', (server, { id, name }) => {
-  server.create('person', { id, name });
+  return server.create('person', { id, name });
 });
 ```
 
