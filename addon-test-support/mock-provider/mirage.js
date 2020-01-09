@@ -55,6 +55,13 @@ export default class MirageProvider extends MockProvider {
       let { startMirage } = require(`${modulePrefix}/initializers/ember-cli-mirage`);
       this.server = startMirage();
       this.server.passthrough('/_pact/*path');
+
+      // Workaround for issue: https://github.com/salsify/ember-cli-pact/issues/32
+      const originalHandler = this.server.pretender.handledRequest;
+      this.server.pretender.handledRequest = (verb, path, request) => {
+        if (!this.interaction.captured) this.recordRequest(request);
+        return originalHandler(verb, path, request);
+      };      
     } catch (error) {
       throw new Error(`Unable to start mirage server; is ember-cli-mirage installed? ${error.message}`);
     }
@@ -69,6 +76,7 @@ let mode = 'data';
 
 export function PactEnabled(SerializerClass) {
   return class PactEnabledSerializer extends SerializerClass {
+    // serialize will NOT be invoked if response's body is NOT serializable (e.g. empty body after DELETE request)
     serialize(resource, request) {
       let serialized = super.serialize(...arguments);
       if (activeProvider) {
