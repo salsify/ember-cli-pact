@@ -46,9 +46,10 @@ export default class MockProvider {
    * @method addState
    * @param {string} name
    * @param {object} [params]
+   * @return {number}
    */
   addState(name, params) {
-    this.interaction.addProviderState(name, params);
+    return this.interaction.addProviderState(name, params);
   }
 
   /**

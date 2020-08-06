@@ -10,7 +10,7 @@ export default class Interaction {
   }
 
   addProviderState(name, params) {
-    this.providerStates.push({ name, params });
+    return this.providerStates.push({ name, params });
   }
 
   recordRequest(request) {
