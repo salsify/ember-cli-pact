@@ -3,7 +3,7 @@
 import require from 'require';
 import { assert } from '@ember/debug';
 import { getOwner } from '@ember/application';
-import { getContext } from 'ember-test-helpers';
+import { getContext } from '@ember/test-helpers';
 import { uploadInteraction, finalize } from './upload';
 
 export function setupPact(hooks = {}, options = {}) {
