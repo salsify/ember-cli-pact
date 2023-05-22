@@ -22,7 +22,7 @@
     "test:node": "mocha 'node-tests/**/*-test.js'"
   },
   "dependencies": {
-    "@pact-foundation/pact-node": "^8.4.0",
+    "@pact-foundation/pact-node": "^10.13.1",
     "body-parser": "^1.19.0",
     "broccoli-funnel": "^2.0.2",
     "debug": "^4.1.1",
