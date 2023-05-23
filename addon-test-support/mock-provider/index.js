@@ -1,6 +1,6 @@
 import { assert } from '@ember/debug';
 import { run } from '@ember/runloop';
-import { getContext } from 'ember-test-helpers';
+import { getContext } from '@ember/test-helpers';
 import { Promise } from 'rsvp';
 
 import Interaction from 'ember-cli-pact/-private/interaction';
